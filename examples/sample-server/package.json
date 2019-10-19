@@ -1,0 +1,38 @@
+{
+  "name": "sample-api",
+  "version": "1.0.0",
+  "description": "Sample API",
+  "main": "src/node/server.js",
+  "scripts": {
+    "production": "cross-env NODE_ENV=production node node/server.js",
+    "build": "rm -rf dist/ && tsc",
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts",
+    "start": "nodemon src/node/server.ts"
+  },
+  "keywords": [],
+  "author": "sergiofilhow@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@libstack/sequel": "^1.0.0-dev.7",
+    "@libstack/server": "^1.0.0-dev.7",
+    "@types/bluebird": "^3.5.28",
+    "@types/express": "^4.17.1",
+    "@types/node": "^12.11.1",
+    "@types/uuid": "^3.4.5",
+    "@types/validator": "^10.11.3",
+    "cross-env": "^5.1.4",
+    "lodash": "^4.17.15",
+    "pg": "^7.8.2",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.0",
+    "sequelize-typescript": "^1.0.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@libstack/tester": "^1.0.0-dev.12",
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.4"
+  }
+}
