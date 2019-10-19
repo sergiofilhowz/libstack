@@ -1,13 +1,12 @@
 import express, { Application } from 'express';
 import bodyParser from 'body-parser';
-import { createServer, Server } from 'http';
+import { createServer, Server as HttpServer } from 'http';
 import config from './config';
 import controller from 'express-power-router';
-import './interceptors';
 
-export class NodeServer {
+export class Server {
   app:Application;
-  server:Server;
+  server:HttpServer;
 
   private beforeScripts:Array<Function> = [];
 
@@ -32,4 +31,4 @@ export class NodeServer {
   };
 }
 
-export default NodeServer;
+export default Server;

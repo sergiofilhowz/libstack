@@ -1,6 +1,6 @@
 {
   "name": "@libstack/server",
-  "version": "1.0.0-dev.2",
+  "version": "1.0.0-dev.7",
   "description": "Server",
   "main": "./dist",
   "files": [

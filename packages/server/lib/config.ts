@@ -1,5 +1,6 @@
 import config from 'config';
 const cfg = { ...config, ...process.env };
+import * as _ from 'lodash';
 
 /**
  * The main configuration class
@@ -16,9 +17,11 @@ export class Config {
   /**
    * Returns a value if it is present
    * @param name
+   * @param defaultValue in case there's no value configured
    */
-  get(name:string):string {
-    return this.innerConfig[name];
+  get(name:string, defaultValue?:string):string {
+    const result = this.innerConfig[name];
+    return _.isUndefined(result) ? defaultValue : result;
   }
 
   /**
@@ -40,9 +43,12 @@ export class Config {
   /**
    * Returns the value as a number
    * @param name
+   * @param defaultValue in case there's no value configured
    */
-  getNumber(name:string):number {
-    return +this.innerConfig[name];
+  getNumber(name:string, defaultValue?:number):number {
+    const result = this.innerConfig[name];
+    if (_.isUndefined(result)) return defaultValue;
+    return _.isNumber(result) ? result : _.toNumber(result);
   }
 
   /**
