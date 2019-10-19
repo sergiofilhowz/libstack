@@ -1,0 +1,28 @@
+{
+  "name": "@libstack/tester",
+  "version": "1.0.0-dev.12",
+  "description": "Tester",
+  "main": "./dist",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "rm -rf dist/ && tsc",
+    "test": "yarn build && mocha ./test --exit"
+  },
+  "keywords": [
+    "node",
+    "web",
+    "commons"
+  ],
+  "license": "MIT",
+  "author": "sergiofilhow@gmail.com",
+  "dependencies": {
+    "@types/chai": "^4.2.3",
+    "@types/lodash": "^4.14.144",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {}
+}
