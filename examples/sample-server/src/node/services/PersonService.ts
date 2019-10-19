@@ -10,7 +10,7 @@ interface PersonRequest {
 
 class PersonService {
 
-  async create(request:PersonRequest) {
+  async create(request:PersonRequest):Promise<Person> {
     const model = Person.build({ id: uuidv4() });
     model.first_name = request.first_name;
     model.last_name = request.last_name;
@@ -18,12 +18,12 @@ class PersonService {
     return model.save();
   }
 
-  async deletePerson(id:string) {
+  async deletePerson(id:string):Promise<void> {
     const model = await this.findOne(id);
-    return model.destroy();
+    await model.destroy();
   }
 
-  async update(id:string, request:PersonRequest) {
+  async update(id:string, request:PersonRequest):Promise<Person> {
     const model = await this.findOne(id);
 
     model.first_name = request.first_name;
@@ -33,11 +33,11 @@ class PersonService {
     return model.save();
   }
 
-  async list() {
+  async list():Promise<Array<Person>> {
     return Person.findAll();
   }
 
-  async findOne(id:string) {
+  async findOne(id:string):Promise<Person> {
     const model = await Person.findOne({ where: { id } });
     if (!model) {
       throw new NotFoundError('Person not Found');
