@@ -1,6 +1,11 @@
-import { Sequelize } from 'sequelize';
+import { ModelCtor, Sequelize } from 'sequelize-typescript';
 import { config } from '@libstack/server';
 import SequelizeMigration, { MigrationOptions } from './migration';
+import './interceptors';
+
+export interface SyncOptions {
+  clear: boolean;
+}
 
 export class Database {
   sequelize:Sequelize;
@@ -42,9 +47,9 @@ export class Database {
       sync: { force: false },
 
       pool: {
-        max: config.getNumber('DB_POOL_MAX_CONNECTIONS'),
-        min: config.getNumber('DB_POOL_MIN_CONNECTIONS'),
-        idle: config.getNumber('DB_POOL_MAX_IDLE_TIME')
+        max: config.getNumber('DB_POOL_MAX_CONNECTIONS', 50),
+        min: config.getNumber('DB_POOL_MIN_CONNECTIONS', 0),
+        idle: config.getNumber('DB_POOL_MAX_IDLE_TIME', 30)
       }
     });
 
@@ -55,9 +60,28 @@ export class Database {
     this.migration.addModule(options);
   }
 
-  sync = async () => {
+  sync = async (options?: SyncOptions) => {
+    if (options && options.clear) {
+      if (process.env.NODE_ENV !== 'test') {
+        throw new Error('Clear is only allowed when NODE_ENV is `test`');
+      }
+      await this.sequelize.getQueryInterface().dropAllTables({ force: true });
+    }
     await this.migration.sync();
   };
 }
 
-export default new Database();
+export const database = new Database();
+
+export function SequelizeModel(target: Function): void;
+export function SequelizeModel(arg: any): void | Function {
+  if (typeof arg === 'function') {
+    inject(arg);
+  } else {
+    return (target: any) => inject(target);
+  }
+}
+
+function inject(target: ModelCtor): void {
+  database.sequelize.addModels([target]);
+}

@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import path from 'path';
 import { keyBy, sortBy } from 'lodash';
-import fs from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 
 export interface MigrationOptions {
   dir: string;
@@ -11,7 +11,7 @@ export default class SequelizeMigration {
   private sequelize: Sequelize;
   private dialectName: string;
   private modules: Array<MigrationOptions> = [];
-  private Migration: any;
+  Migration: any;
 
   constructor(sequelize:Sequelize) {
     this.sequelize = sequelize;
@@ -55,7 +55,7 @@ export default class SequelizeMigration {
     });
 
     const migrationsMap = migrations && keyBy(migrations, 'script_name') || {};
-    const scripts = sortBy(fs.readdirSync(path.join(moduleDescriptor.dir, dialectName)))
+    const scripts = sortBy(readdirSync(path.join(moduleDescriptor.dir, dialectName)))
       .filter(scriptName => migrationsMap[scriptName] === undefined);
 
     for (let script of scripts) {
@@ -70,7 +70,7 @@ export default class SequelizeMigration {
           version: version,
           success: false
         });
-        const content = fs.readFileSync(path.join(moduleDescriptor.dir, dialectName, script), 'utf8');
+        const content = readFileSync(path.join(moduleDescriptor.dir, dialectName, script), 'utf8');
         await this.sequelize.query(content);
 
         migration.success = true;
