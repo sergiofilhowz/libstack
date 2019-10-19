@@ -14,13 +14,61 @@ describe('PersonRouter', () => {
   });
 
   it('should create a person', async () => {
-    const response = await post('/v1/person', {
+    let response = await post('/v1/person', {
       first_name: 'Sergio',
       last_name: 'Marcelino',
       age: 30
     });
     expect(response.status).to.be.equal(200);
     expect(response.body).to.have.property('first_name').equal('Sergio');
+    expect(response.body).to.have.property('last_name').equal('Marcelino');
+    expect(response.body).to.have.property('age').equal(30);
+
+    const { id } = response.body;
+
+    response = await get(`/v1/person/${id}`);
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.have.property('first_name').equal('Sergio');
+    expect(response.body).to.have.property('last_name').equal('Marcelino');
+    expect(response.body).to.have.property('age').equal(30);
+  });
+
+  it('should update a person', async () => {
+    let response = await post('/v1/person', {
+      first_name: 'Sergio',
+      last_name: 'Marcelino',
+      age: 30
+    });
+    expect(response.status).to.be.equal(200);
+
+    const { id } = response.body;
+
+    response = await put(`/v1/person/${id}`, {
+      first_name: 'Sergio',
+      last_name: 'Marcelino Filho',
+      age: 30
+    });
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.have.property('first_name').equal('Sergio');
+    expect(response.body).to.have.property('last_name').equal('Marcelino Filho');
+    expect(response.body).to.have.property('age').equal(30);
+  });
+
+  it('should delete a person', async () => {
+    let response = await post('/v1/person', {
+      first_name: 'Sergio',
+      last_name: 'Marcelino',
+      age: 30
+    });
+    expect(response.status).to.be.equal(200);
+
+    const { id } = response.body;
+
+    response = await http.delete(`/v1/person/${id}`);
+    expect(response.status).to.be.equal(200);
+
+    response = await get(`/v1/person/${id}`);
+    expect(response.status).to.be.equal(404);
   });
 
 });
