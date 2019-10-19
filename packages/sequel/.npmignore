@@ -1,0 +1,7 @@
+node_modules/
+index.ts
+tsconfig.json
+yarn.lock
+lib/
+test/
+yarn-error.log
