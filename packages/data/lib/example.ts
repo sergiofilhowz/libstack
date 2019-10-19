@@ -6,13 +6,17 @@ import { EQUAL } from './operator';
 
 @Projection
 class AddressResponse {
-  @Property street: string;
+  @Property
+  street: string;
 }
 
 @Projection({ sorted: true })
 class PersonResponse {
-  @Property name: string;
-  @Property last_name: string;
+  @Property
+  name: string;
+
+  @Property
+  last_name: string;
 
   @Property({ property: 'Address' })
   address: AddressResponse;
