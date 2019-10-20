@@ -1,11 +1,10 @@
-export type Operator = (expression:any, property:string, value: any) => void;
-
+type Operator = (expression:any, property:string, value: any) => void;
 
 export interface CriteriaOptions {
   /**
    * The property to be used in the criteria
    */
-  property: string;
+  property?: string;
 
   /**
    * The operator to be executed on this criteria

@@ -1,16 +1,21 @@
 import { ModelCtor } from 'sequelize-typescript';
 
-export interface SingleOptions<T> {
-  projection: { new(): T; };
-  criteria?: object;
+export interface CriteriaRequest<T> {
+  reference: { new(): T; };
+  query: T
 }
 
-export interface ListOptions<T> extends SingleOptions<T> {
+export interface SingleOptions<P, C> {
+  projection: { new(): P; };
+  criteria?: CriteriaRequest<C>;
+}
+
+export interface ListOptions<P, C> extends SingleOptions<P, C> {
   sort?: string;
   pageSize?: number;
 }
 
-export interface PageOptions<T> extends ListOptions<T> {
+export interface PageOptions<P, C> extends ListOptions<P, C> {
   page: number;
 }
 
@@ -27,13 +32,13 @@ export class Page<T> {
 export class Model {
   constructor(private model:ModelCtor) {}
 
-  async list<T>(options:ListOptions<T>):Promise<Array<T>> {
+  async list<P, C>(options:ListOptions<P, C>):Promise<Array<P>> {
     return [];
   }
-  async page<T>(options:PageOptions<T>):Promise<Page<T>> {
+  async page<P, C>(options:PageOptions<P, C>):Promise<Page<P>> {
     return new Page([], 0);
   }
-  async single<T>(options:SingleOptions<T>):Promise<T> {
+  async single<P, C>(options:SingleOptions<P, C>):Promise<P> {
     return null;
   }
 }
