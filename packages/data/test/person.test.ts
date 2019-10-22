@@ -29,11 +29,12 @@ describe('Model', () => {
 
   it('should have a projection mapping', () => {
     const projection = Reflect.getMetadata('projection', PersonResponse);
-    expect(projection.properties.get('uuid')).to.have.property('property').equal('uuid');
+    expect(projection.properties[0]).to.have.property('modelProperty').equal('uuid');
+    expect(projection.properties[0]).to.have.property('projectionProperty').equal('uuid');
   });
 
   it('should get list of people', async () => {
-    let result:Array<PersonResponse> = await PersonModel.getList({});
+    const result:Array<PersonResponse> = await PersonModel.getList({});
 
     expect(result).with.length(1);
     expect(result[0]).to.have.property('uuid').equal(person.uuid);
@@ -44,12 +45,23 @@ describe('Model', () => {
     const addressExpect = expect(result[0]).to.have.property('address');
     addressExpect.to.have.property('street').equal(address.street);
     addressExpect.to.have.property('number').equal(address.number);
+  });
 
-    result = await PersonModel.getList({ firstName: 'Sergio' });
+  it('should filter with criteria equal', async () => {
+    let result = await PersonModel.getList({ firstName: 'Sergio' });
     expect(result).with.length(1);
 
     result = await PersonModel.getList({ firstName: 'Sergioo' });
     expect(result).with.length(0);
+  });
+
+  it('should get list of person addresses', async () => {
+    let result:Array<PersonResponse> = await PersonModel.getList({});
+
+    expect(result).with.length(1);
+    expect(result[0]).to.have.property('address_uuid').equal(address.uuid);
+    expect(result[0]).to.have.property('address_street').equal(address.street);
+    expect(result[0]).to.have.property('address_number').equal(address.number);
   });
 
   it('should get a single person', async () => {

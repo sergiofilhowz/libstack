@@ -22,6 +22,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "5.15.1",
     "sequelize-typescript": "^1.0.0",
+    "squel": "^5.13.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

@@ -14,15 +14,15 @@ export function Projection(options?: any): void | Function {
   }
 }
 
-interface ProjectionConfiguration {
-  properties: Map<string, PropertyConfiguration>;
+export interface ProjectionConfiguration {
+  properties: PropertyConfiguration[];
   options?: ProjectionOptions;
 }
 
 function projection(target:any, options?:ProjectionOptions) {
   if (!Reflect.hasMetadata('projection', target.prototype)) {
     Reflect.defineMetadata('projection', {
-      properties: new Map<string, PropertyConfiguration>(),
+      properties: [],
       options: options || {}
     }, target);
   } else {
@@ -32,12 +32,18 @@ function projection(target:any, options?:ProjectionOptions) {
   }
 }
 
-interface PropertyOptions {
+type JoinType = 'left' | 'right';
+
+export interface PropertyOptions {
   property?: string;
+  joinType?: JoinType;
 }
 
-interface PropertyConfiguration extends PropertyOptions {
+export interface PropertyConfiguration {
   propertyType: any;
+  projectionProperty: string;
+  modelProperty: string;
+  options?: PropertyOptions;
 }
 
 export function Property(target: Function): void;
@@ -60,16 +66,17 @@ export function Property(...args: any[]): void | Function {
 function property(target: any, propertyName: string, options?:PropertyOptions) {
   if (!Reflect.hasMetadata('projection', target)) {
     Reflect.defineMetadata('projection', {
-      properties: new Map<string, PropertyConfiguration>(),
+      properties: [],
       options: {}
     }, target);
   }
 
   const type = Reflect.getMetadata('design:type', target, propertyName);
   const projection:ProjectionConfiguration = Reflect.getMetadata('projection', target);
-  projection.properties.set(propertyName, {
-    ...options,
-    property: options && options.property || propertyName,
-    propertyType: type
+  projection.properties.push({
+    projectionProperty: propertyName,
+    modelProperty: options && options.property || propertyName,
+    propertyType: type,
+    options
   });
 }

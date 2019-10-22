@@ -16,9 +16,13 @@ export interface CriteriaOptions {
  * Criterias are meant for filtering values
  */
 export function Criteria(options: CriteriaOptions): Function {
-  return (target: any, propertyName: string, propertyDescriptor?: PropertyDescriptor) => criteria(target, options);
+  return (target: any, propertyName: string) => criteria(target, propertyName, options);
 }
 
-function criteria(target: any, options: CriteriaOptions) {
-
+function criteria(type: any, propertyName:string, options: CriteriaOptions) {
+  type.$criteria = type.$criteria || new Map<string, CriteriaOptions>();
+  type.$criteria[propertyName] = {
+    property: options.property || propertyName,
+    operator: options.operator
+  };
 }

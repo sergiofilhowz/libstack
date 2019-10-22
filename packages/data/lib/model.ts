@@ -1,4 +1,5 @@
 import { ModelCtor } from 'sequelize-typescript';
+import { QueryBuilder } from './query/query.builder';
 
 export interface CriteriaRequest<T> {
   reference: { new(): T; };
@@ -33,7 +34,8 @@ export class Model {
   constructor(private model:ModelCtor) {}
 
   async list<P, C>(options:ListOptions<P, C>):Promise<Array<P>> {
-    return [];
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    return queryBuilder.list();
   }
   async page<P, C>(options:PageOptions<P, C>):Promise<Page<P>> {
     return new Page([], 0);

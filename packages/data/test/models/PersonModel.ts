@@ -14,7 +14,20 @@ export class PersonResponse {
   @Property uuid: string;
   @Property first_name: string;
   @Property last_name: string;
+  @Property age: number;
   @Property address: AddressResponse;
+}
+
+@Projection({ sorted: true })
+export class PersonAddressResponse {
+  @Property({ property: 'address.uuid' })
+  address_uuid: string;
+
+  @Property({ property: 'address.street' })
+  address_street: string;
+
+  @Property({ property: 'address.number' })
+  address_number: string;
 }
 
 class PersonCriteria {
@@ -36,6 +49,10 @@ class PersonSingleCriteria {
 class PersonModel extends Model {
   constructor() {
     super(Person);
+  }
+
+  getPersonAddresses():Promise<Array<PersonAddressResponse>> {
+    return this.list({ projection: PersonAddressResponse });
   }
 
   getList(query:PersonCriteria):Promise<Array<PersonResponse>> {
