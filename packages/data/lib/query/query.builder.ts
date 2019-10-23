@@ -1,8 +1,11 @@
 import { Association, DataType, ModelCtor } from 'sequelize';
 import { Transformer, ProjectionConfiguration, PropertyConfiguration, PropertyOptions } from '../projection';
-import { Query } from './query';
+import { Page, Query } from './query';
 import { getDeletedAtColumn, getTableName, getValue } from './query.utils';
 import _ from 'lodash';
+import { CriteriaRequest } from '../model';
+import { CriteriaConfiguration, CriteriaFieldConfiguration } from '../criteria';
+import squel, { Expression } from 'squel';
 
 class ModelAssociation {
   alias: string;
@@ -14,7 +17,8 @@ class ModelAssociation {
 type FieldDefinition = { type: DataType; transform?: Transformer };
 
 export class QueryBuilder<T> {
-  private query: Query;
+  readonly query: Query;
+
   private aliasCount:number = 0;
   private readonly mainAlias:string;
   private readonly associations: { [key: string]: ModelAssociation; } = {};
@@ -25,7 +29,7 @@ export class QueryBuilder<T> {
     this.mainAlias = this.createAlias(model.name);
 
     if (!QueryBuilder.isProjection(this.projection)) {
-      throw new Error('This class is not a @Projection');
+      throw new Error(`The class ${this.projection.name} is not a @Projection`);
     }
     const projectionConfig:ProjectionConfiguration = Reflect.getMetadata('projection', this.projection);
 
@@ -35,6 +39,55 @@ export class QueryBuilder<T> {
     }
 
     this.build(this.mainAlias, this.model, projectionConfig);
+  }
+
+  criteria(criteriaRequest:CriteriaRequest<any>) {
+    const { reference, query } = criteriaRequest;
+
+    const criteria:CriteriaConfiguration = Reflect.getMetadata('criteria', reference.prototype);
+    if (!criteria) {
+      throw new Error(`The class ${reference.name} is not a Criteria`);
+    }
+
+    const expression:Expression = squel.expr();
+
+    criteria.fields.forEach((fieldConfig:CriteriaFieldConfiguration) => {
+      const { modelProperty } = fieldConfig;
+
+      const queryValue:any = query[fieldConfig.field];
+      if (queryValue !== undefined && queryValue !== null) {
+        let value = queryValue;
+        if (fieldConfig.propertyType === Boolean && fieldConfig.options.value !== undefined) {
+          // é boolean
+          if (queryValue === true) {
+            value = fieldConfig.options.value;
+          } else {
+            return;
+          }
+        }
+
+        if (modelProperty.indexOf('.') > 0) {
+          const modelAssociation = this.getAssociation(this.mainAlias, modelProperty, this.model);
+          const split = modelProperty.split('.');
+          const lastProperty = split[split.length - 1];
+
+          if (!modelAssociation.model.rawAttributes.hasOwnProperty(lastProperty)) {
+            throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
+          }
+          const field = `${modelAssociation.alias}.${lastProperty}`;
+          fieldConfig.options.operator(expression.and.bind(expression), field, value, this);
+        } else if (this.model.rawAttributes.hasOwnProperty(modelProperty)) {
+          const field = `${this.mainAlias}.${modelProperty}`;
+          fieldConfig.options.operator(expression.and.bind(expression), field, value, this);
+        } else if (this.model.associations.hasOwnProperty(modelProperty)) {
+          throw new Error(`Entire association is not allowed to be on Criteria. ${this.projection.name}.${modelProperty}`);
+        } else {
+          throw new Error(`Property ${modelProperty} not found on Model ${this.model.name}`);
+        }
+      }
+    });
+
+    this.query.where(expression);
   }
 
   private createAlias(name: string) {
@@ -101,7 +154,7 @@ export class QueryBuilder<T> {
           throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
         }
 
-        const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
+        const field = prefix ? `${prefix}.${modelProperty}` : projectionProperty;
         this.query.field(`${modelAssociation.alias}.${lastProperty}`, field);
         this.fields[field] = {
           type: modelAssociation.model.rawAttributes[lastProperty].type,
@@ -120,6 +173,8 @@ export class QueryBuilder<T> {
           const associationProjection:ProjectionConfiguration = Reflect.getMetadata('projection', propertyType);
           const newPrefix = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
           this.build(modelAssociation.alias, modelAssociation.model, associationProjection, newPrefix);
+        } else {
+          throw new Error(`Property ${modelProperty} is an association, but the type on the Projection is not another Projection`)
         }
       } else {
         throw new Error(`Property ${modelProperty} not found on Model ${model.name}`);
@@ -132,11 +187,19 @@ export class QueryBuilder<T> {
     return list.map(item => this.mapItem(item));
   }
 
+  async getPage():Promise<Page<T>> {
+    const page:Page<any> = await this.query.getPage();
+    page.list = page.list.map(item => this.mapItem(item));
+    return page;
+  }
+
   async single():Promise<T> {
     return this.mapItem(await this.query.single());
   }
 
   private mapItem(item:any):any {
+    if (item === null) return null;
+
     const result = {};
     _.forEach(item, (value: any, key: string) => {
       const field:FieldDefinition = this.fields[key];

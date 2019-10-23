@@ -1,5 +1,6 @@
 import { ModelCtor } from 'sequelize-typescript';
 import { QueryBuilder } from './query/query.builder';
+import { Page } from './query/query';
 
 export interface CriteriaRequest<T> {
   reference: { new(): T; };
@@ -20,28 +21,32 @@ export interface PageOptions<P, C> extends ListOptions<P, C> {
   page: number;
 }
 
-export class Page<T> {
-  list: Array<T>;
-  count: number;
-
-  constructor(list: Array<T>, count:number) {
-    this.list = list;
-    this.count = count;
-  }
-}
-
 export class Model {
   constructor(private model:ModelCtor) {}
 
   async list<P, C>(options:ListOptions<P, C>):Promise<Array<P>> {
     const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    if (options.pageSize !== null && options.pageSize !== undefined) {
+      queryBuilder.query.size(options.pageSize);
+    }
+    if (options.criteria && options.criteria.query) {
+      queryBuilder.criteria(options.criteria);
+    }
     return queryBuilder.list();
   }
   async page<P, C>(options:PageOptions<P, C>):Promise<Page<P>> {
-    return new Page([], 0);
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    if (options.criteria) {
+      queryBuilder.criteria(options.criteria);
+    }
+    queryBuilder.query.page(options.page, options.pageSize);
+    return queryBuilder.getPage();
   }
   async single<P, C>(options:SingleOptions<P, C>):Promise<P> {
     const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    if (options.criteria) {
+      queryBuilder.criteria(options.criteria);
+    }
     return queryBuilder.single();
   }
 }

@@ -21,10 +21,7 @@ export interface ProjectionConfiguration {
 
 function projection(target:any, options?:ProjectionOptions) {
   if (!Reflect.hasMetadata('projection', target.prototype)) {
-    Reflect.defineMetadata('projection', {
-      properties: [],
-      options: options || {}
-    }, target);
+    throw new Error(`Class ${target.name} has a @Projection but is missing a @Property`);
   } else {
     const projection:ProjectionConfiguration = Reflect.getMetadata('projection', target.prototype);
     projection.options = options;

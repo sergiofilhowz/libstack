@@ -1,5 +1,4 @@
-import { Model, Property, Projection, Criteria } from '../..';
-import { EQUAL } from '../../lib/operator';
+import { Model, Property, Projection, Criteria, EQUAL, GREATER_THAN, ILIKE, LESS_THAN } from '../..';
 import { Person } from '../sequelize/Person';
 
 @Projection
@@ -41,14 +40,20 @@ export class PersonAddressResponse {
 }
 
 class PersonCriteria {
-  @Criteria({ property: 'first_name', operator: EQUAL })
+  @Criteria({ property: 'first_name', operator: ILIKE })
   firstName?: string;
 
-  @Criteria({ property: 'last_name', operator: EQUAL })
-  lastName?: string;
+  @Criteria({ property: 'address.city.name', operator: ILIKE })
+  city?: string;
 
   @Criteria({ operator: EQUAL })
   age?: number;
+
+  @Criteria({ operator: GREATER_THAN, property: 'age', value: 18 })
+  adults_only?:boolean;
+
+  @Criteria({ operator: LESS_THAN, property: 'age', value: 18 })
+  kids_only?:boolean;
 }
 
 class PersonSingleCriteria {
@@ -65,7 +70,7 @@ class PersonModel extends Model {
     return this.list({ projection: PersonAddressResponse });
   }
 
-  getList(query:PersonCriteria):Promise<Array<PersonResponse>> {
+  getList(query?:PersonCriteria):Promise<Array<PersonResponse>> {
     return this.list({
       projection: PersonResponse,
       criteria: {

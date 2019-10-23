@@ -2,8 +2,8 @@ import { Sequelize, Transaction } from 'sequelize';
 import { getBySequelize } from './squel.factory';
 import { BaseBuilder, Expression, FieldOptions, Select } from 'squel';
 
-export interface Page {
-  list: Array<any>;
+export interface Page<T> {
+  list: Array<T>;
   count: number;
   page: number;
   pages: number;
@@ -101,7 +101,7 @@ export class Query {
     return this;
   }
 
-  async getPage():Promise<Page> {
+  async getPage():Promise<Page<any>> {
     const pageSize = this._pageSize;
     const page = this._page;
     const [result, count] = await Promise.all([this.list(), this.count()]);
@@ -113,21 +113,25 @@ export class Query {
     };
   }
 
-  page(page:number, size:number): this {
+  size(size: number):this {
     this._pageSize = size;
+    this.limit(size);
+    return this;
+  }
+
+  page(page:number, size:number): this {
+    this.size(size);
     this._page = page;
-    this.offset((page - 1) * size).limit(size);
+    this.offset((page - 1) * size);
     return this;
   }
 
   async list():Promise<Array<any>> {
     const { text, values } = this.selectQuery.toParam();
-    console.log(text, values);
     const [result]:any = await this.sequelize.query(text, {
       replacements: values,
       transaction: this.transaction
     });
-    console.log(result);
     return result;
   };
 
@@ -137,7 +141,7 @@ export class Query {
       replacements: values,
       transaction: this.transaction
     });
-    return result[0];
+    return result.length ? result[0] : null;
   }
 
   async count():Promise<number> {

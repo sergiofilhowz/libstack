@@ -1,4 +1,7 @@
-type Operator = (expression:any, property:string, value: any) => void;
+import { QueryBuilder } from './query/query.builder';
+
+export type Expression = (expr: string | Expression, ...params: any[]) => void;
+export type Operator = (expression:Expression, property:string, value?: any, queryBuilder?:QueryBuilder<any>) => void;
 
 export interface CriteriaOptions {
   /**
@@ -10,6 +13,11 @@ export interface CriteriaOptions {
    * The operator to be executed on this criteria
    */
   operator: Operator;
+
+  /**
+   * Value to be compared
+   */
+  value?: any;
 }
 
 /**
@@ -19,10 +27,30 @@ export function Criteria(options: CriteriaOptions): Function {
   return (target: any, propertyName: string) => criteria(target, propertyName, options);
 }
 
-function criteria(type: any, propertyName:string, options: CriteriaOptions) {
-  type.$criteria = type.$criteria || new Map<string, CriteriaOptions>();
-  type.$criteria[propertyName] = {
-    property: options.property || propertyName,
-    operator: options.operator
-  };
+export interface CriteriaFieldConfiguration {
+  field: string;
+  propertyType: any;
+  modelProperty: string;
+  options: CriteriaOptions;
+}
+
+export interface CriteriaConfiguration {
+  fields: CriteriaFieldConfiguration[];
+}
+
+function criteria(target: any, propertyName:string, options: CriteriaOptions) {
+  if (!Reflect.hasMetadata('criteria', target)) {
+    Reflect.defineMetadata('criteria', {
+      fields: [],
+    }, target);
+  }
+
+  const propertyType = Reflect.getMetadata('design:type', target, propertyName);
+  const criteria:CriteriaConfiguration = Reflect.getMetadata('criteria', target);
+  criteria.fields.push({
+    field: propertyName,
+    propertyType,
+    modelProperty: options && options.property || propertyName,
+    options
+  });
 }

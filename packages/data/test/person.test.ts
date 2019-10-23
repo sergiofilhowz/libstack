@@ -41,7 +41,7 @@ describe('Model', () => {
   });
 
   it('should get list of people', async () => {
-    const result:Array<PersonResponse> = await PersonModel.getList({});
+    const result:Array<PersonResponse> = await PersonModel.getList();
 
     expect(result).with.length(1);
     expect(result[0]).to.have.property('uuid').equal(person.uuid);
@@ -60,17 +60,9 @@ describe('Model', () => {
   });
 
   it('should get list of people with transform on field', async () => {
-    const result:Array<PersonResponse> = await PersonModel.getList({});
+    const result:Array<PersonResponse> = await PersonModel.getList();
     expect(result).with.length(1);
     expect(result[0]).to.have.property('adult').equal(true);
-  });
-
-  it('should filter with criteria equal', async () => {
-    let result = await PersonModel.getList({ firstName: 'Sergio' });
-    expect(result).with.length(1);
-
-    result = await PersonModel.getList({ firstName: 'Sergioo' });
-    expect(result).with.length(0);
   });
 
   it('should return values on a Projection with properties from an association', async () => {
@@ -83,7 +75,7 @@ describe('Model', () => {
   });
 
   it('should get a single person', async () => {
-    const result:PersonResponse = await PersonModel.getSingle(person.uuid);
+    let result:PersonResponse = await PersonModel.getSingle(person.uuid);
 
     expect(result).to.not.be.null;
     expect(result).to.have.property('uuid').equal(person.uuid);
@@ -94,6 +86,35 @@ describe('Model', () => {
     const addressExpect = expect(result).to.have.property('address');
     addressExpect.to.have.property('street').equal(address.street);
     addressExpect.to.have.property('number').equal(address.number);
+
+    result = await PersonModel.getSingle('65f91139-1a1d-46fe-a743-59d307a55dd6');
+    expect(result).to.be.null;
   });
+
+  describe('Criteria', () => {
+    it('should filter with criteria ILIKE', async () => {
+      let result = await PersonModel.getList({ firstName: 'Sergio' });
+      expect(result).with.length(1);
+
+      result = await PersonModel.getList({ firstName: 'Sergioo' });
+      expect(result).with.length(0);
+    });
+
+    it('should filter with criteria ILIKE on subproperty', async () => {
+      let result = await PersonModel.getList({ city: 'Wash' });
+      expect(result).with.length(1);
+
+      result = await PersonModel.getList({ city: 'San Francisco' });
+      expect(result).with.length(0);
+    });
+
+    it('should filter with criteria GREATER_THAN with flag field', async () => {
+      let result = await PersonModel.getList({ adults_only: true });
+      expect(result).with.length(1);
+
+      result = await PersonModel.getList({ kids_only: true });
+      expect(result).with.length(0);
+    });
+  })
 
 });
