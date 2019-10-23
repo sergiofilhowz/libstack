@@ -23,6 +23,9 @@ export class PersonResponse {
   @Property last_name: string;
   @Property age: number;
   @Property address: AddressResponse;
+
+  @Property({ property: 'age', transform: (value:number) => value >= 18 })
+  adult: boolean;
 }
 
 @Projection({ sorted: true })

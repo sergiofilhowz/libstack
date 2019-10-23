@@ -1,7 +1,7 @@
-import { Association, ModelAttributeColumnOptions, ModelCtor } from 'sequelize';
-import { ProjectionConfiguration, PropertyConfiguration, PropertyOptions } from '../projection';
+import { Association, DataType, ModelCtor } from 'sequelize';
+import { Transformer, ProjectionConfiguration, PropertyConfiguration, PropertyOptions } from '../projection';
 import { Query } from './query';
-import { getDeletedAtColumn, getTableName } from './query.utils';
+import { getDeletedAtColumn, getTableName, getValue } from './query.utils';
 import _ from 'lodash';
 
 class ModelAssociation {
@@ -11,11 +11,14 @@ class ModelAssociation {
   modelProperty: string;
 }
 
+type FieldDefinition = { type: DataType; transform?: Transformer };
+
 export class QueryBuilder<T> {
   private query: Query;
   private aliasCount:number = 0;
   private readonly mainAlias:string;
   private readonly associations: { [key: string]: ModelAssociation; } = {};
+  private readonly fields: { [key: string]: FieldDefinition } = {};
 
   constructor(private model:ModelCtor<any>, private projection:{ new(): T; }) {
     this.query = new Query(model.sequelize);
@@ -100,9 +103,17 @@ export class QueryBuilder<T> {
 
         const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
         this.query.field(`${modelAssociation.alias}.${lastProperty}`, field);
+        this.fields[field] = {
+          type: modelAssociation.model.rawAttributes[lastProperty].type,
+          transform: options && options.transform
+        };
       } else if (model.rawAttributes.hasOwnProperty(modelProperty)) {
         const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
         this.query.field(`${alias}.${modelProperty}`, field);
+        this.fields[field] = {
+          type: model.rawAttributes[modelProperty].type,
+          transform: options && options.transform
+        };
       } else if (model.associations.hasOwnProperty(modelProperty)) {
         const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
         if (QueryBuilder.isProjection(propertyType)) {
@@ -118,7 +129,7 @@ export class QueryBuilder<T> {
 
   async list():Promise<Array<T>> {
     const list:Array<any> = await this.query.list();
-    return list.map(this.mapItem);
+    return list.map(item => this.mapItem(item));
   }
 
   async single():Promise<T> {
@@ -127,7 +138,11 @@ export class QueryBuilder<T> {
 
   private mapItem(item:any):any {
     const result = {};
-    _.forEach(item, (value: any, key: string):object => _.set(result, key, value));
+    _.forEach(item, (value: any, key: string) => {
+      const field:FieldDefinition = this.fields[key];
+      const resultValue:any = getValue(field.type, value);
+      _.set(result, key, field.transform ? field.transform(resultValue) : resultValue);
+    });
     return result;
   }
 

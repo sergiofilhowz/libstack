@@ -32,11 +32,13 @@ function projection(target:any, options?:ProjectionOptions) {
   }
 }
 
-type JoinType = 'left' | 'right';
+export type JoinType = 'left' | 'right';
+export type Transformer = (value:any) => any;
 
 export interface PropertyOptions {
   property?: string;
   joinType?: JoinType;
+  transform?: Transformer;
 }
 
 export interface PropertyConfiguration {

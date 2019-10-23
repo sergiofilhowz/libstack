@@ -1,4 +1,4 @@
-import { AbstractDataTypeConstructor, DataTypes, ModelCtor } from 'sequelize';
+import { DataType, DataTypes, ModelCtor } from 'sequelize';
 
 const transformers: { [key:string]: Function } = {};
 
@@ -13,11 +13,11 @@ transformers[DataTypes.BOOLEAN.key] = (value:boolean|Buffer) =>
 
 export const getDeletedAtColumn = (model:ModelCtor<any>) => model.options.deletedAt || 'deletedAt';
 
-export const getValue = (type:AbstractDataTypeConstructor, value:any) => {
+export const getValue = (type:DataType, value:any) => {
   if (value == null) {
     return null;
   }
-  const transformer:Function = transformers[type.key];
+  const transformer:Function = transformers[typeof type === 'string' ? type : type.key];
   return transformer ? transformer(value) : value;
 };
 

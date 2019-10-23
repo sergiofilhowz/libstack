@@ -59,6 +59,12 @@ describe('Model', () => {
     cityExpect.to.have.property('name').equal(city.name);
   });
 
+  it('should get list of people with transform on field', async () => {
+    const result:Array<PersonResponse> = await PersonModel.getList({});
+    expect(result).with.length(1);
+    expect(result[0]).to.have.property('adult').equal(true);
+  });
+
   it('should filter with criteria equal', async () => {
     let result = await PersonModel.getList({ firstName: 'Sergio' });
     expect(result).with.length(1);
