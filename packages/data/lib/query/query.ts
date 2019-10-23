@@ -127,6 +127,7 @@ export class Query {
       replacements: values,
       transaction: this.transaction
     });
+    console.log(result);
     return result;
   };
 

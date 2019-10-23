@@ -3,15 +3,22 @@ import createUuid from 'uuid/v4';
 import database from './database';
 import { Person } from './sequelize/Person';
 import { Address } from './sequelize/Address';
-import PersonModel, { PersonResponse } from './models/PersonModel';
+import PersonModel, { PersonAddressResponse, PersonResponse } from './models/PersonModel';
+import { City } from './sequelize/City';
 
 describe('Model', () => {
   before(() => database.sync({ clear: true }));
 
+  let city:City;
   let address:Address;
   let person:Person;
 
   before(async () => {
+    city = await City.create({
+      uuid: createUuid(),
+      name: 'Washington DC',
+    });
+
     address = await Address.create({
       uuid: createUuid(),
       street: '5th Street',
@@ -43,8 +50,13 @@ describe('Model', () => {
     expect(result[0]).to.have.property('age').equal(person.age);
 
     const addressExpect = expect(result[0]).to.have.property('address');
+    addressExpect.to.have.property('uuid').equal(address.uuid);
     addressExpect.to.have.property('street').equal(address.street);
     addressExpect.to.have.property('number').equal(address.number);
+
+    const cityExpect = addressExpect.to.have.property('city');
+    cityExpect.to.have.property('uuid').equal(city.uuid);
+    cityExpect.to.have.property('name').equal(city.name);
   });
 
   it('should filter with criteria equal', async () => {
@@ -55,8 +67,8 @@ describe('Model', () => {
     expect(result).with.length(0);
   });
 
-  it('should get list of person addresses', async () => {
-    let result:Array<PersonResponse> = await PersonModel.getList({});
+  it('should return values on a Projection with properties from an association', async () => {
+    let result:Array<PersonAddressResponse> = await PersonModel.getPersonAddresses();
 
     expect(result).with.length(1);
     expect(result[0]).to.have.property('address_uuid').equal(address.uuid);

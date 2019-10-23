@@ -3,10 +3,17 @@ import { EQUAL } from '../../lib/operator';
 import { Person } from '../sequelize/Person';
 
 @Projection
+export class CityResponse {
+  @Property uuid: string;
+  @Property name: string;
+}
+
+@Projection
 export class AddressResponse {
   @Property uuid: string;
   @Property street: string;
   @Property number: number;
+  @Property city: CityResponse;
 }
 
 @Projection({ sorted: true })

@@ -41,6 +41,7 @@ export class Model {
     return new Page([], 0);
   }
   async single<P, C>(options:SingleOptions<P, C>):Promise<P> {
-    return null;
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    return queryBuilder.single();
   }
 }

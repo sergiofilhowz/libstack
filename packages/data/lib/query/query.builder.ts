@@ -1,5 +1,5 @@
 import { Association, ModelAttributeColumnOptions, ModelCtor } from 'sequelize';
-import { ProjectionConfiguration, PropertyConfiguration } from '../projection';
+import { ProjectionConfiguration, PropertyConfiguration, PropertyOptions } from '../projection';
 import { Query } from './query';
 import { getDeletedAtColumn, getTableName } from './query.utils';
 import _ from 'lodash';
@@ -7,6 +7,7 @@ import _ from 'lodash';
 class ModelAssociation {
   alias: string;
   association: Association;
+  model: ModelCtor<any>;
   modelProperty: string;
 }
 
@@ -43,33 +44,71 @@ export class QueryBuilder<T> {
     return projection !== undefined;
   }
 
+  private getAssociationInternal(alias:string, property:string, model:ModelCtor<any>, options?:PropertyOptions):ModelAssociation {
+    if (model.rawAttributes.hasOwnProperty(property)) {
+      throw new Error(`Property ${property} field is not an association on model ${model.name}`);
+    } else if (model.associations.hasOwnProperty(property)) {
+      const association:Association = model.associations[property];
+      if (!this.associations[property]) {
+        const associationAlias = this.createAlias(property);
+        this.associations[property] = {
+          alias: associationAlias,
+          modelProperty: property,
+          model: association.target,
+          association
+        };
+        const condition = `${alias}.${association.source.primaryKeyAttribute} = ${associationAlias}.${association.target.primaryKeyAttribute}`;
+        if (options && options.joinType === 'right') {
+          this.query.join(association.target.tableName, associationAlias, condition);
+        } else {
+          this.query.left_join(association.target.tableName, associationAlias, condition);
+        }
+      }
+      return this.associations[property];
+    } else {
+      throw new Error(`Property ${property} not found on Model ${model.name}`);
+    }
+  }
+
+  private getAssociation(alias:string, modelProperty:string, model:ModelCtor<any>, options?:PropertyOptions) {
+    if (modelProperty.indexOf('.') > 0) {
+      const associations = modelProperty.split('.');
+      let lastAssociation:ModelAssociation = null;
+      for (let i = 0; i < associations.length - 1; i++) {
+        const currentProperty = associations[i];
+        const currentModel:ModelCtor<any> = lastAssociation && lastAssociation.model || model;
+        lastAssociation = this.getAssociation(alias, currentProperty, currentModel, options);
+      }
+
+      return lastAssociation;
+    }
+    return this.getAssociationInternal(alias, modelProperty, model, options);
+  }
+
   private build(alias:string, model:ModelCtor<any>, projection:ProjectionConfiguration, prefix?:string) {
     projection.properties.forEach((property:PropertyConfiguration) => {
       const { modelProperty, projectionProperty, options, propertyType } = property;
-      if (model.rawAttributes.hasOwnProperty(modelProperty)) {
-        // const rawAttribute:ModelAttributeColumnOptions = model.rawAttributes[modelProperty];
+
+      if (modelProperty.indexOf('.') > 0) {
+        const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
+        const split = modelProperty.split('.');
+        const lastProperty = split[split.length - 1];
+
+        if (!modelAssociation.model.rawAttributes.hasOwnProperty(lastProperty)) {
+          throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
+        }
+
+        const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
+        this.query.field(`${modelAssociation.alias}.${lastProperty}`, field);
+      } else if (model.rawAttributes.hasOwnProperty(modelProperty)) {
         const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
         this.query.field(`${alias}.${modelProperty}`, field);
       } else if (model.associations.hasOwnProperty(modelProperty)) {
-        const association:Association = model.associations[modelProperty];
-        if (!this.associations[modelProperty]) {
-          const associationAlias = this.createAlias(modelProperty);
-          this.associations[modelProperty] = {
-            alias: associationAlias,
-            modelProperty,
-            association
-          };
-          const condition = `${alias}.${association.source.primaryKeyAttribute} = ${associationAlias}.${association.target.primaryKeyAttribute}`;
-          if (options && options.joinType === 'right') {
-            this.query.join(association.target.tableName, associationAlias, condition);
-          } else {
-            this.query.left_join(association.target.tableName, associationAlias, condition);
-          }
-        }
-        const modelAssociation = this.associations[modelProperty];
+        const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
         if (QueryBuilder.isProjection(propertyType)) {
           const associationProjection:ProjectionConfiguration = Reflect.getMetadata('projection', propertyType);
-          this.build(modelAssociation.alias, association.target, associationProjection, projectionProperty);
+          const newPrefix = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
+          this.build(modelAssociation.alias, modelAssociation.model, associationProjection, newPrefix);
         }
       } else {
         throw new Error(`Property ${modelProperty} not found on Model ${model.name}`);
@@ -77,14 +116,19 @@ export class QueryBuilder<T> {
     });
   }
 
-  async list():Promise<Array<any>> {
+  async list():Promise<Array<T>> {
     const list:Array<any> = await this.query.list();
-    return list.map((item:any) => {
-      const result = {};
-      _.forEach(item,  (value: any, key: string) => _.set(result, key, value));
-      return result;
-    });
+    return list.map(this.mapItem);
   }
 
+  async single():Promise<T> {
+    return this.mapItem(await this.query.single());
+  }
+
+  private mapItem(item:any):any {
+    const result = {};
+    _.forEach(item, (value: any, key: string):object => _.set(result, key, value));
+    return result;
+  }
 
 }

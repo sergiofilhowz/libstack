@@ -1,5 +1,16 @@
-import { IsUUID, Model, PrimaryKey, Table, Column, Length, AutoIncrement } from 'sequelize-typescript';
+import {
+  IsUUID,
+  Model,
+  PrimaryKey,
+  Table,
+  Column,
+  Length,
+  AutoIncrement,
+  ForeignKey,
+  BelongsTo
+} from 'sequelize-typescript';
 import { SequelizeModel } from '@libstack/sequel';
+import { City } from './City';
 
 @SequelizeModel
 @Table({ tableName: 'address' })
@@ -20,5 +31,12 @@ export class Address extends Model<Address> {
 
   @Column
   number: number;
+
+  @ForeignKey(() => City)
+  @Column
+  city_id: number;
+
+  @BelongsTo(() => City)
+  city:City;
 
 }
