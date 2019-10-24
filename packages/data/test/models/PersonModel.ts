@@ -1,5 +1,7 @@
-import { Model, Property, Projection, Criteria, EQUAL, GREATER_THAN, ILIKE, LESS_THAN } from '../..';
+import { Model, Property, Projection, Criteria, Operators } from '../..';
 import { Person } from '../sequelize/Person';
+
+const { EQUAL, GREATER_THAN, ILIKE, LESS_THAN } = Operators;
 
 @Projection
 export class CityResponse {
@@ -27,7 +29,7 @@ export class PersonResponse {
   adult: boolean;
 }
 
-@Projection({ sorted: true })
+@Projection
 export class PersonAddressResponse {
   @Property({ property: 'address.uuid' })
   address_uuid: string;
@@ -39,7 +41,7 @@ export class PersonAddressResponse {
   address_number: string;
 }
 
-class PersonCriteria {
+export class PersonCriteria {
   @Criteria({ property: 'first_name', operator: ILIKE })
   firstName?: string;
 
@@ -56,7 +58,7 @@ class PersonCriteria {
   kids_only?:boolean;
 }
 
-class PersonSingleCriteria {
+export class PersonSingleCriteria {
   @Criteria({ operator: EQUAL })
   uuid: string;
 }
@@ -64,30 +66,6 @@ class PersonSingleCriteria {
 class PersonModel extends Model {
   constructor() {
     super(Person);
-  }
-
-  getPersonAddresses():Promise<Array<PersonAddressResponse>> {
-    return this.list({ projection: PersonAddressResponse });
-  }
-
-  getList(query?:PersonCriteria):Promise<Array<PersonResponse>> {
-    return this.list({
-      projection: PersonResponse,
-      criteria: {
-        reference: PersonCriteria,
-        query: query
-      }
-    });
-  }
-
-  getSingle(uuid:string):Promise<PersonResponse> {
-    return this.single({
-      projection: PersonResponse,
-      criteria: {
-        reference: PersonSingleCriteria,
-        query: { uuid }
-      }
-    });
   }
 }
 

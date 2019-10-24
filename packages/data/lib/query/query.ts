@@ -114,6 +114,8 @@ export class Query {
   }
 
   size(size: number):this {
+    if (size === undefined || size === null) return this;
+
     this._pageSize = size;
     this.limit(size);
     return this;

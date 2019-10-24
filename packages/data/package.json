@@ -1,6 +1,6 @@
 {
   "name": "@libstack/data",
-  "version": "1.0.0-dev.7",
+  "version": "1.0.0-dev.1",
   "description": "Data",
   "main": "./dist",
   "files": [

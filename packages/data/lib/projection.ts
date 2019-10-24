@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 export interface ProjectionOptions {
-  sorted?: boolean
 }
 
 export function Projection(target: Function): void;
