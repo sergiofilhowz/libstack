@@ -1,6 +1,7 @@
 import uuidv4 from 'uuid/v4';
 import { NotFoundError } from '@libstack/server';
 import { Person } from '../sequelize/Person';
+import personModel, { PersonCriteria, PersonResponse, PersonSingleCriteria } from '../models/PersonModel';
 
 interface PersonRequest {
   first_name: string;
@@ -10,34 +11,58 @@ interface PersonRequest {
 
 class PersonService {
 
-  async create(request:PersonRequest):Promise<Person> {
-    const model = Person.build({ id: uuidv4() });
+  async create(request:PersonRequest):Promise<PersonResponse> {
+    const id = uuidv4();
+    const model = Person.build({ id });
     model.first_name = request.first_name;
     model.last_name = request.last_name;
     model.age = request.age;
-    return model.save();
+    await model.save();
+
+    return this.get(id);
   }
 
   async deletePerson(id:string):Promise<void> {
-    const model = await this.findOne(id);
+    const model = await PersonService.findOne(id);
     await model.destroy();
   }
 
-  async update(id:string, request:PersonRequest):Promise<Person> {
-    const model = await this.findOne(id);
+  async update(id:string, request:PersonRequest):Promise<PersonResponse> {
+    const model = await PersonService.findOne(id);
 
     model.first_name = request.first_name;
     model.last_name = request.last_name;
     model.age = request.age;
 
-    return model.save();
+    await model.save();
+    return this.get(id);
   }
 
-  async list():Promise<Array<Person>> {
-    return Person.findAll();
+  async list(query:any):Promise<Array<PersonResponse>> {
+    return personModel.list({
+      projection: PersonResponse,
+      criteria: {
+        reference: PersonCriteria,
+        query
+      }
+    });
   }
 
-  async findOne(id:string):Promise<Person> {
+  async get(id:string):Promise<PersonResponse> {
+    const model = await personModel.single({
+      projection: PersonResponse,
+      criteria: {
+        reference: PersonSingleCriteria,
+        query: { id }
+      }
+    });
+    if (!model) {
+      throw new NotFoundError('Person not Found');
+    }
+    return model;
+  }
+
+  private static async findOne(id:string):Promise<Person> {
     const model = await Person.findOne({ where: { id } });
     if (!model) {
       throw new NotFoundError('Person not Found');

@@ -1,28 +1,28 @@
 import { GET, POST, PUT, DELETE, RestController } from '@libstack/server';
 import personService from '../services/PersonService';
 import { Request } from 'express';
-import { Person } from '../sequelize/Person';
+import { PersonResponse } from '../models/PersonModel';
 
 @RestController('/v1/person')
-export default class PersonRouter {
+class PersonRouter {
 
   @GET('/')
-  async listPerson():Promise<Array<Person>> {
-    return personService.list();
+  async listPerson(req:Request):Promise<Array<PersonResponse>> {
+    return personService.list(req.query);
   }
 
   @GET('/:id')
-  async findPerson({ params }:Request):Promise<Person> {
-    return personService.findOne(params.id);
+  async findPerson({ params }:Request):Promise<PersonResponse> {
+    return personService.get(params.id);
   }
 
   @POST('/')
-  async createPerson(request:Request):Promise<Person>{
+  async createPerson(request:Request):Promise<PersonResponse>{
     return personService.create(request.body);
   }
 
   @PUT('/:id')
-  async updatePerson(request:Request):Promise<Person> {
+  async updatePerson(request:Request):Promise<PersonResponse> {
     return personService.update(request.params.id, request.body);
   }
 

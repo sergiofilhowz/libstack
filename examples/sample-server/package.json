@@ -13,13 +13,9 @@
   "author": "sergiofilhow@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "@libstack/data": "^1.0.0-dev.1",
     "@libstack/sequel": "^1.0.0-dev.7",
     "@libstack/server": "^1.0.0-dev.7",
-    "@types/bluebird": "^3.5.28",
-    "@types/express": "^4.17.1",
-    "@types/node": "^12.11.1",
-    "@types/uuid": "^3.4.5",
-    "@types/validator": "^10.11.3",
     "cross-env": "^5.1.4",
     "lodash": "^4.17.15",
     "pg": "^7.8.2",
@@ -32,6 +28,11 @@
   },
   "devDependencies": {
     "@libstack/tester": "^1.0.0-dev.12",
+    "@types/bluebird": "^3.5.28",
+    "@types/express": "^4.17.1",
+    "@types/node": "^12.11.7",
+    "@types/uuid": "^3.4.5",
+    "@types/validator": "^10.11.3",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4"
   }

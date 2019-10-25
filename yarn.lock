@@ -25,6 +25,11 @@
   resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.34.tgz#123f91bdb5afdd702294b9de9ca04d9ea11137b0"
   integrity sha512-jWi9DXx77hnzN4kHCNEvP/kab+nchRLTg9yjXYxjTcMBkuc5iBb3QuwJ4sPrb+nzy1GQjrfyfMqZOdR4i7opRQ==
 
+"@types/config@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.35.tgz#afd0cf04946b4c52b9dd44543f6213a3284bd2e9"
+  integrity sha512-7U79ubpUKlZb5oayMB0axGejGQo+T8IMgnrwb/Ho4e71Qal2zUSalTMIzgsy/CNN8PHLXNPwwEJMwqPQkcGH4A==
+
 "@types/connect@*":
   version "3.4.32"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
@@ -321,7 +326,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-config@^3.2.2:
+config@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/config/-/config-3.2.3.tgz#147a30f9eb235ecc46516f767e211335dbcbf3cc"
   integrity sha512-pditxQzO+SkKX/2gs99YnUGEjmBVkTj2o/hGOgC0oYEU7QgLnVVDYmcSL6HiGels/8QtFJpFzi5iKYv4D0dalg==

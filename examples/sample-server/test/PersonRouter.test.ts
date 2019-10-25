@@ -13,6 +13,23 @@ describe('PersonRouter', () => {
     expect(response.body).with.length(0);
   });
 
+  it('should list with query', async () => {
+    let response = await post('/v1/person', {
+      first_name: 'Sergio',
+      last_name: 'Marcelino',
+      age: 30
+    });
+    expect(response.status).to.be.equal(200);
+
+    response = await get('/v1/person', { query: { adults_only: true }});
+    expect(response.status).to.be.equal(200);
+    expect(response.body).with.length(1);
+
+    response = await get('/v1/person',{ query: { kids_only: true } });
+    expect(response.status).to.be.equal(200);
+    expect(response.body).with.length(0);
+  });
+
   it('should create a person', async () => {
     let response = await post('/v1/person', {
       first_name: 'Sergio',
@@ -23,6 +40,7 @@ describe('PersonRouter', () => {
     expect(response.body).to.have.property('first_name').equal('Sergio');
     expect(response.body).to.have.property('last_name').equal('Marcelino');
     expect(response.body).to.have.property('age').equal(30);
+    expect(response.body).to.have.property('adult').equal(true);
 
     const { id } = response.body;
 
@@ -46,12 +64,13 @@ describe('PersonRouter', () => {
     response = await put(`/v1/person/${id}`, {
       first_name: 'Sergio',
       last_name: 'Marcelino Filho',
-      age: 30
+      age: 15
     });
     expect(response.status).to.be.equal(200);
     expect(response.body).to.have.property('first_name').equal('Sergio');
     expect(response.body).to.have.property('last_name').equal('Marcelino Filho');
-    expect(response.body).to.have.property('age').equal(30);
+    expect(response.body).to.have.property('age').equal(15);
+    expect(response.body).to.have.property('adult').equal(false);
   });
 
   it('should delete a person', async () => {
