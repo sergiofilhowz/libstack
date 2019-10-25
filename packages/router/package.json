@@ -1,0 +1,36 @@
+{
+  "name": "@libstack/router",
+  "version": "1.0.0-dev.1",
+  "description": "An extreme powerful Express Routing machine",
+  "main": "./dist",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc",
+    "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergiofilhowz/libstack.git"
+  },
+  "keywords": [
+    "express",
+    "router",
+    "interceptor"
+  ],
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sergiofilhowz/libstack/issues"
+  },
+  "homepage": "https://github.com/sergiofilhowz/libstack#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.1",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.2.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  }
+}

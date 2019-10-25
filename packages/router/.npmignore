@@ -5,5 +5,3 @@ yarn.lock
 lib/
 test/
 yarn-error.log
-config/
-docker-compose.yml

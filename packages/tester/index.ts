@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import forEach from 'lodash/forEach';
-import { Server } from '@libstack/server/dist';
+import { Server } from '@libstack/server';
 import { SuperAgentRequest, Response } from 'superagent';
 
 chai.use(chaiHttp);
