@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist/ && tsc",
-    "test": "yarn build && mocha ./test --exit"
+    "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "keywords": [
     "node",

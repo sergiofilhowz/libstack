@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist/ && tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+    "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "keywords": [],
   "license": "MIT",
