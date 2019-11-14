@@ -1,6 +1,6 @@
 {
   "name": "@libstack/server",
-  "version": "1.0.0-dev.9",
+  "version": "1.0.0-dev.10",
   "description": "Server",
   "main": "./dist",
   "files": [
@@ -18,7 +18,7 @@
   "license": "MIT",
   "author": "sergiofilhow@gmail.com",
   "dependencies": {
-    "@libstack/router": "^1.0.0-dev.1",
+    "@libstack/router": "^1.0.0-dev.2",
     "body-parser": "^1.19.0",
     "config": "^3.2.3",
     "express": "^4.17.1",

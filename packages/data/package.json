@@ -1,6 +1,6 @@
 {
   "name": "@libstack/data",
-  "version": "1.0.0-dev.1",
+  "version": "1.0.0-dev.2",
   "description": "Data",
   "main": "./dist",
   "files": [
@@ -14,10 +14,6 @@
   "license": "MIT",
   "author": "sergiofilhow@gmail.com",
   "dependencies": {
-    "@types/bluebird": "^3.5.28",
-    "@types/node": "^12.11.1",
-    "@types/validator": "^10.11.3",
-    "express-power-router": "2.0.0-beta.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "sequelize": "5.15.1",
@@ -26,12 +22,12 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.28",
+    "@types/bluebird": "^3.5.29",
     "@types/chai": "^4.2.3",
     "@types/config": "^0.0.34",
     "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.12.7",
     "@types/uuid": "^3.4.5",
     "@types/validator": "^10.11.3",
     "chai": "^4.2.0",
@@ -39,7 +35,6 @@
     "mysql2": "^1.7.0",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "ts-node": "^8.4.1"
   }
 }

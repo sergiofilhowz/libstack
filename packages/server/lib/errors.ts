@@ -1,4 +1,4 @@
-import { HttpError } from 'express-power-router';
+import { HttpError } from '@libstack/router';
 
 export class UnauthorizedError extends HttpError {
   constructor(message:string, data?:any) {

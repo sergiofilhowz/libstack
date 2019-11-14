@@ -1,6 +1,6 @@
 {
   "name": "@libstack/router",
-  "version": "1.0.0-dev.1",
+  "version": "1.0.0-dev.2",
   "description": "An extreme powerful Express Routing machine",
   "main": "./dist",
   "scripts": {
@@ -30,7 +30,6 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "ts-node": "^8.4.1"
   }
 }

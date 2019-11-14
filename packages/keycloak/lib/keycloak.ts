@@ -1,8 +1,8 @@
 import axios from 'axios';
 import querystring from 'query-string';
 import * as _ from 'lodash';
-import { CallableStack, Interceptor, RestInterceptor } from 'express-power-router';
 import { Request, Response } from 'express';
+import { CallableStack, Interceptor, RestInterceptor } from '@libstack/router';
 import { config, Config, UnauthorizedError } from '@libstack/server';
 
 const validateTokenConfig = {

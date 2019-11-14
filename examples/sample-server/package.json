@@ -13,9 +13,9 @@
   "author": "sergiofilhow@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@libstack/data": "^1.0.0-dev.1",
-    "@libstack/sequel": "^1.0.0-dev.7",
-    "@libstack/server": "^1.0.0-dev.7",
+    "@libstack/data": "^1.0.0-dev.2",
+    "@libstack/sequel": "^1.0.0-dev.8",
+    "@libstack/server": "^1.0.0-dev.10",
     "cross-env": "^5.1.4",
     "lodash": "^4.17.15",
     "pg": "^7.8.2",

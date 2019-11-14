@@ -1,4 +1,4 @@
-import { BadRequestError, CallableStack, Interceptor, RestInterceptor } from '@libstack/server';
+import { BadRequestError, CallableStack, Interceptor, RestInterceptor } from '@libstack/router';
 import { ValidationError } from 'sequelize';
 import { Request, Response } from 'express';
 
