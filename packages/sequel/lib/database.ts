@@ -2,32 +2,50 @@ import { ModelCtor, Sequelize } from 'sequelize-typescript';
 import { config } from '@libstack/server';
 import SequelizeMigration, { MigrationOptions } from './migration';
 import './interceptors';
+import { Dialect } from 'sequelize';
 
 export interface SyncOptions {
   clear: boolean;
+}
+
+export interface DatabaseOptions {
+  database: string;
+
+  username: string;
+  password: string;
+
+  host?: string;
+  port?: number;
+
+  logging?: boolean;
+  dialect: Dialect;
+
+  sync?: boolean;
+
+  socketPath?: string;
+
+  poolMax?: number;
+  poolMin?: number;
+  poolIdle?: number;
 }
 
 export class Database {
   sequelize:Sequelize;
   migration:SequelizeMigration;
 
-  constructor() {
-    const DB_NAME:string = config.get('DB_NAME');
-    const DB_USERNAME:string = config.get('DB_USERNAME');
-    const DB_PASSWORD:string = config.get('DB_PASSWORD');
+  constructor(options: DatabaseOptions) {
+    this.sequelize = new Sequelize(options.database, options.username, options.password, {
+      host: options?.host,
+      port: options?.port,
+      logging: options?.logging && console.log,
 
-    this.sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
-      host: config.get('DB_HOST'),
-      port: config.getNumber('DB_PORT'),
-      logging: config.getBoolean('VERBOSE') && console.log,
-
-      dialect: config.innerConfig['DB_DIALECT'],
+      dialect: options?.dialect,
 
       dialectOptions: {
-        socketPath: config.get('DB_SOCKET_PATH'),
+        socketPath: options.socketPath,
         supportBigNumbers: true,
         bigNumberStrings: true,
-        multipleStatements: config.getBoolean('SYNC')
+        multipleStatements: options.sync
       },
 
       define: {
@@ -47,9 +65,9 @@ export class Database {
       sync: { force: false },
 
       pool: {
-        max: config.getNumber('DB_POOL_MAX_CONNECTIONS', 50),
-        min: config.getNumber('DB_POOL_MIN_CONNECTIONS', 0),
-        idle: config.getNumber('DB_POOL_MAX_IDLE_TIME', 30)
+        max: options.poolMax,
+        min: options.poolMin,
+        idle: options.poolIdle
       }
     });
 
@@ -71,7 +89,24 @@ export class Database {
   };
 }
 
-export const database = new Database();
+export const database = new Database({
+  database: config.get('DB_NAME'),
+
+  username: config.get('DB_USERNAME'),
+  password: config.get('DB_PASSWORD'),
+
+  dialect: config.innerConfig['DB_DIALECT'],
+
+  host: config.get('DB_HOST'),
+  port: config.getNumber('DB_PORT'),
+
+
+  socketPath: config.get('DB_SOCKET_PATH'),
+
+  poolMax: config.getNumber('DB_POOL_MAX_CONNECTIONS', 50),
+  poolMin: config.getNumber('DB_POOL_MIN_CONNECTIONS', 0),
+  poolIdle: config.getNumber('DB_POOL_MAX_IDLE_TIME', 30),
+});
 
 export function SequelizeModel(target: Function): void;
 export function SequelizeModel(arg: any): void | Function {
