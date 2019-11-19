@@ -7,7 +7,7 @@ import { SuperAgentRequest, Response } from 'superagent';
 chai.use(chaiHttp);
 chai.should();
 
-export type OptionsDecorator = Function;
+export type OptionsDecorator = (options:RequestOptions) => Promise<RequestOptions>;
 
 export interface RequestOptions {
   body?:any;
@@ -71,8 +71,8 @@ export class Http {
     return new Http(this.server, decorator);
   }
 
-  decorateOptions(options:RequestOptions):RequestOptions {
-    return this.optionsDecorator ? this.optionsDecorator(options) : options;
+  decorateOptions(options:RequestOptions):Promise<RequestOptions> {
+    return this.optionsDecorator ? this.optionsDecorator(options) : Promise.resolve(options);
   }
 }
 

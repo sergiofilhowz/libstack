@@ -30,6 +30,7 @@
     "@libstack/tester": "^1.0.0-dev.12",
     "@types/bluebird": "^3.5.28",
     "@types/express": "^4.17.1",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.7",
     "@types/uuid": "^3.4.5",
     "@types/validator": "^10.11.3",

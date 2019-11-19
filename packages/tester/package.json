@@ -1,6 +1,6 @@
 {
   "name": "@libstack/tester",
-  "version": "1.0.0-dev.14",
+  "version": "1.0.0-dev.15",
   "description": "Tester",
   "main": "./dist",
   "files": [

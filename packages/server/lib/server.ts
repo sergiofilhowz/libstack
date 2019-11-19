@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { createServer, Server as HttpServer } from 'http';
 import config from './config';
 import controller from '@libstack/router';
@@ -14,6 +15,7 @@ export class Server {
     this.app = express();
     this.server = createServer(this.app);
 
+    this.app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization'] }));
     this.app.use(bodyParser.json({ limit: '20mb' }));
     this.app.use('/', controller.router);
   }
