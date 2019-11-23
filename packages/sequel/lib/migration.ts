@@ -8,9 +8,10 @@ export interface MigrationOptions {
 }
 
 export default class SequelizeMigration {
-  private sequelize: Sequelize;
-  private dialectName: string;
-  private modules: Array<MigrationOptions> = [];
+  private readonly sequelize: Sequelize;
+  private readonly dialectName: string;
+  private readonly modules: Array<MigrationOptions> = [];
+
   Migration: any;
 
   constructor(sequelize:Sequelize) {

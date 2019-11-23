@@ -44,3 +44,21 @@ export class NotFoundError extends HttpError {
     super(message, 404, data);
   }
 }
+
+/*
+ * The UnauthorizedError object
+ */
+export class UnauthorizedError extends HttpError {
+  constructor(message:string, data?:any) {
+    super(message, 401, data);
+  }
+}
+
+/*
+ * The Forbidden object
+ */
+export class ForbiddenError extends HttpError {
+  constructor(message:string, data?:any) {
+    super(message, 403, data);
+  }
+}

@@ -15,7 +15,12 @@
     "type": "git",
     "url": "git+https://github.com/sergiofilhowz/libstack.git"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "typescript",
+    "server",
+    "sql"
+  ],
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "dependencies": {

@@ -2,8 +2,8 @@ import axios from 'axios';
 import querystring from 'query-string';
 import * as _ from 'lodash';
 import { Request, Response } from 'express';
-import { CallableStack, Interceptor, RestInterceptor } from '@libstack/router';
-import { config, Config, UnauthorizedError } from '@libstack/server';
+import { CallableStack, Interceptor, RestInterceptor, UnauthorizedError, ForbiddenError } from '@libstack/router';
+import { config, Config } from '@libstack/server';
 
 const validateTokenConfig = {
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -40,10 +40,10 @@ class KeycloakClient {
       client_secret: this.clientSecret
     });
     const { data } = await this.server.post(this.validateUrl, body, validateTokenConfig);
-    data.hasRole = (roles:Array<string>|string) => {
-      if (!_.isArray(roles)) roles = [roles];
+    data.hasRole = (roles:Array<string>|string): boolean => {
+      const rolesToCheck: string [] = typeof roles === 'string' ? [roles] : roles;
       const tokenRoles = _.get(data, `resource_access.${this.clientId}.roles`);
-      return tokenRoles && _.intersection(tokenRoles, roles).length > 0;
+      return tokenRoles && _.intersection(tokenRoles, rolesToCheck).length > 0;
     };
     return data;
   }
@@ -55,8 +55,11 @@ class KeycloakClient {
     }
 
     const tokenData = await this.validateAccessToken(bearer.substr("bearer ".length));
-    if (!tokenData.active || !tokenData.hasRole(role)) {
+    if (!tokenData.active) {
       throw new UnauthorizedError('Not Authorized');
+    }
+    if (!tokenData.hasRole(role)) {
+      throw new ForbiddenError('Not Authorized');
     }
     request.tokenData = tokenData;
   };
@@ -89,12 +92,12 @@ class KeycloakClient {
 }
 
 const keycloakClient = new KeycloakClient(config);
-const enabled = config.getBoolean('KEYCLOAK_ENABLED');
+const enabled: boolean = config.getBoolean('KEYCLOAK_ENABLED');
 
-@RestInterceptor()
+@RestInterceptor({ disabled: !enabled })
 class KeycloakInterceptor implements Interceptor {
   intercepts(parameters:any, request:Request): boolean {
-    return enabled && parameters && parameters.roles;
+    return parameters && parameters.roles;
   }
   async execute(parameters:any, req:Request, res:Response, stack:CallableStack): Promise<any> {
     await keycloakClient.interceptExpressRequest(req, parameters.roles);

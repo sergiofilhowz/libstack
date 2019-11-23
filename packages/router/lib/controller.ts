@@ -1,7 +1,6 @@
 import { HttpError } from './http.error';
 import express, { Request, Response, Router } from 'express';
 import InterceptorManager, { Interceptor } from './interceptor';
-import { ProjectionOptions } from '@libstack/data';
 
 class Controller {
   router:Router;
@@ -23,24 +22,32 @@ class Controller {
   }
 }
 
+/**
+ * Basic Interceptor options
+ */
 export interface InterceptorOptions {
-
+  /**
+   * If this flag is set to true, the interceptor won't be created
+   */
+  disabled?: boolean
 }
 
 export const controller = new Controller();
 
 export function RestInterceptor(target: Function): void;
-export function RestInterceptor(options?: InterceptorOptions): Function;
+export function RestInterceptor(options: InterceptorOptions): Function;
 export function RestInterceptor(options?: any): void | Function {
   if (typeof options === 'function') {
     createInterceptor(options);
   } else {
-    return (target: any) => createInterceptor(target);
+    return (target: any) => createInterceptor(target, options);
   }
 }
 
-function createInterceptor(interceptor:any) {
-  controller.createInterceptor(new interceptor());
+function createInterceptor(interceptor:any, options?: InterceptorOptions) {
+  if (!options?.disabled) {
+    controller.createInterceptor(new interceptor());
+  }
 }
 
 export function RestController(path:string) {

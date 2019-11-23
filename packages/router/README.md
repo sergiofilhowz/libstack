@@ -13,7 +13,7 @@ import controller, { RestController, GET, POST, BadRequestError, CallableStack, 
 
 const app = express();
 
-@RestInterceptor()
+@RestInterceptor
 class AddPropertyInterceptor implements Interceptor {
   intercepts(parameters:any):boolean {
     return parameters.addProperty;

@@ -15,7 +15,8 @@
   "keywords": [
     "express",
     "router",
-    "interceptor"
+    "interceptor",
+    "typescript"
   ],
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "license": "MIT",

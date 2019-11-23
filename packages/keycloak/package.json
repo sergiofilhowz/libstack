@@ -1,7 +1,7 @@
 {
   "name": "@libstack/keycloak",
   "version": "1.0.0-dev.8",
-  "description": "Keycloak",
+  "description": "Libstack Server - Keycloak Integration",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
-    "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
+    "test": "NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,9 @@
   },
   "keywords": [
     "node",
-    "web",
-    "commons"
+    "typescript",
+    "server",
+    "keycloak"
   ],
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.140",
-    "@types/node": "^12.11.1"
+    "@types/node": "^12.11.1",
+    "nock": "^11.7.0"
   }
 }

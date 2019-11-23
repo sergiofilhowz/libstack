@@ -1,15 +1,9 @@
 {
   "VERBOSE": false,
-  "SYNC": true,
   "PORT": 8875,
-
-  "DB_DIALECT": "postgres",
-  "DB_HOST": "localhost",
-  "DB_PORT": 5432,
-  "DB_NAME": "test",
-  "DB_USERNAME": "postgres",
-  "DB_PASSWORD": "postgres",
-  "DB_POOL_MAX_CONNECTIONS": 5,
-  "DB_POOL_MAX_IDLE_TIME": 30,
-  "DB_MAX_CONCURRENT_QUERIES": 50
+  "KEYCLOAK_ENABLED": true,
+  "KEYCLOAK_AUTH_URL":  "https://auth.service.org",
+  "KEYCLOAK_CLIENT_ID": "keycloak_test",
+  "KEYCLOAK_CLIENT_SECRET":  "a1881f13-3f71-4771-9c3d-d3317c4cdaaf",
+  "KEYCLOAK_REALM": "keycloak-test"
 }

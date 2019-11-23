@@ -10,7 +10,16 @@
     "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
     "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergiofilhowz/libstack.git"
+  },
+  "keywords": [
+    "node",
+    "typescript",
+    "server",
+    "sql"
+  ],
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "dependencies": {
