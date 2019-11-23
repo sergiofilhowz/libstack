@@ -1,5 +1,11 @@
-# Libstack Server - Keycloak Integration
+# @libstack/keycloak
 Add keycloak integration to your `@libstack/server`.
+
+## Installing
+
+```
+npm install @libstack/keycloak --save
+```
 
 ## New env variables
 >- `KEYCLOAK_ENABLED`: Must be true to enable the integration

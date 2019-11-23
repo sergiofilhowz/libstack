@@ -43,7 +43,7 @@ export interface PageOptions<P, C> extends ListOptions<P, C> {
  * The model is the main part of the Data project.
  * You can create projections and criterias
  */
-export class Model {
+export class DataModel {
   constructor(private model:ModelCtor) {}
 
   /**

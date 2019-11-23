@@ -1,5 +1,13 @@
-# Libstack Data Module
+# @libstack/data
 This module will help you create better queries on your database using the power of `sequelize`.
+
+## Installing
+
+```
+npm install @libstack/data --save
+```
+
+## Using
 
 So lets supose you have a Model on your application (Lets call it Address).
 
@@ -122,21 +130,21 @@ export class CityResponse {
 Now, lets write the model and start using. You will need to create the Model class
 
 ```typescript
-import { Model } from '@libstack/data';
+import { DataModel } from '@libstack/data';
 import { Address } from '../sequelize/Person';
 
-class AddressModel extends Model {
+class AddressDataModel extends DataModel {
   constructor() {
     super(Address);
   }
 }
 ```
 
-Now lets start using the model. The code bellow will return a list of the type you defined.
+Now lets start using the DataModel. The code bellow will return a list of the type you defined.
 
 ```typescript
-const addressModel: AddressModel = new AddressModel();
-const result:Array<AddressResponse> = await addressModel.list({
+const dataModel: AddressDataModel = new AddressDataModel();
+const result:Array<AddressResponse> = await dataModel.list({
   projection: AddressResponse
 });
 ```
@@ -172,7 +180,7 @@ export class AddressUuidCriteria {
 And now you can start creating filters
 
 ```typescript
-let result: AddressResponse [] = await model.list({
+let result: AddressResponse [] = await dataModel.list({
   projection: AddressResponse,
   criteria: {
     reference: AddressCriteria,
@@ -184,7 +192,7 @@ let result: AddressResponse [] = await model.list({
 Or requesting a single row based on the `AddressUuidCriteria`
 
 ```typescript
-let result: AddressResponse = await model.single({
+let result: AddressResponse = await dataModel.single({
   projection: AddressResponse,
   criteria: {
     reference: AddressUuidCriteria,
@@ -197,7 +205,7 @@ let result: AddressResponse = await model.single({
 All properties you defined are sortable. All you need to do is use the sort on list. 
 
 ```typescript
-let result: AddressResponse [] = await model.list({
+let result: AddressResponse [] = await dataModel.list({
   projection: AddressResponse,
   sort: 'street'
 });
@@ -207,7 +215,7 @@ let result: AddressResponse [] = await model.list({
 You can request pages which will perform a count query based on the criteria (if there's one) and will create a paged result.
 
 ```typescript
-const result:Page<AddressResponse> = await model.page({
+const result:Page<AddressResponse> = await dataModel.page({
   pageSize: 1,
   page: 1,
   projection: AddressResponse,

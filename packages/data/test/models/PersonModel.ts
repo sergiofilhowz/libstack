@@ -1,4 +1,4 @@
-import { Model, Property, Projection, Criteria, Operators } from '../..';
+import { DataModel, Property, Projection, Criteria, Operators } from '../..';
 import { Person } from '../sequelize/Person';
 
 const { EQUAL, GREATER_THAN, ILIKE, LESS_THAN } = Operators;
@@ -15,6 +15,12 @@ export class AddressResponse {
   @Property street: string;
   @Property number: number;
   @Property city: CityResponse;
+}
+
+@Projection
+export class TagResponse {
+  @Property uuid: string;
+  @Property name: string;
 }
 
 @Projection({ sorted: true })
@@ -63,7 +69,7 @@ export class PersonSingleCriteria {
   uuid: string;
 }
 
-class PersonModel extends Model {
+class PersonModel extends DataModel {
   constructor() {
     super(Person);
   }
