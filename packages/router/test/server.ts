@@ -12,7 +12,7 @@ import controller, {
 
 const app = express();
 
-@RestInterceptor()
+@RestInterceptor
 class AddPropertyInterceptor implements Interceptor {
   intercepts(parameters:any):boolean {
     return parameters.addProperty;

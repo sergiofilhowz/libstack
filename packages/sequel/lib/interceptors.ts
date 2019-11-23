@@ -2,7 +2,7 @@ import { BadRequestError, CallableStack, Interceptor, RestInterceptor } from '@l
 import { ValidationError } from 'sequelize';
 import { Request, Response } from 'express';
 
-@RestInterceptor()
+@RestInterceptor
 class ValidationInterceptor implements Interceptor {
   intercepts(parameters:any, request:Request): boolean {
     return true;

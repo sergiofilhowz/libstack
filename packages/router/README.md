@@ -46,6 +46,6 @@ class TestRouter {
   }
 }
 
-app.use(controller.router); // use plugin the powerRouter to your express app
+app.use(controller.router); // use plugin the @libstack/router to your express app
 app.listen(process.env.PORT || 8080);
 ```

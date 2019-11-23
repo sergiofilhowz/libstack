@@ -5,12 +5,12 @@
   "main": "src/node/server.js",
   "scripts": {
     "production": "cross-env NODE_ENV=production node node/server.js",
-    "build": "rm -rf dist/ && tsc",
-    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts",
+    "build": "rm -rf dist/ && npx tsc --diagnostics -p tsconfig.json",
+    "test": "cross-env NODE_ENV=test mocha --timeout 15000 --exit -r ts-node/register test/**/*.test.ts",
     "start": "nodemon src/node/server.ts"
   },
   "keywords": [],
-  "author": "sergiofilhow@gmail.com",
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@libstack/data": "^1.0.0-dev.2",
@@ -19,11 +19,8 @@
     "cross-env": "^5.1.4",
     "lodash": "^4.17.15",
     "pg": "^7.8.2",
-    "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.0",
     "sequelize-typescript": "^1.0.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -35,6 +32,9 @@
     "@types/uuid": "^3.4.5",
     "@types/validator": "^10.11.3",
     "mocha": "^6.2.2",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.2"
   }
 }

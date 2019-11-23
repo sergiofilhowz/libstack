@@ -195,6 +195,7 @@ export class QueryBuilder<T> {
         };
       } else if (model.associations.hasOwnProperty(modelProperty)) {
         const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
+
         if (QueryBuilder.isProjection(propertyType)) {
           const associationProjection:ProjectionConfiguration = Reflect.getMetadata('projection', propertyType);
           const newPrefix = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;

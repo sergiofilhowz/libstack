@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 /**
  * The main configuration class
  *
- * @author sergio@filho.org
+ * @author Sérgio Marcelino <sergiofilhow@gmail.com>
  */
 export class Config {
   innerConfig:any;

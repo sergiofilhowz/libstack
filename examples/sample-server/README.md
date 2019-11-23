@@ -1,2 +1,1 @@
-# geo
-Geo
+# Sample server

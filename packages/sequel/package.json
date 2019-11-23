@@ -7,15 +7,14 @@
     "dist/*"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
     "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "keywords": [],
   "license": "MIT",
-  "author": "sergiofilhow@gmail.com",
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "dependencies": {
     "@libstack/router": "^1.0.0-dev.2",
-    "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "sequelize": "5.15.1",
     "sequelize-typescript": "^1.0.0"
@@ -28,9 +27,6 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.7",
     "@types/validator": "^10.11.3",
-    "chai": "^4.2.0",
-    "mocha": "^6.2.2",
-    "mysql2": "^1.7.0",
-    "ts-node": "^8.4.1"
+    "mysql2": "^1.7.0"
   }
 }

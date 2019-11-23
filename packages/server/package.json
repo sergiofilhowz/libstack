@@ -2,12 +2,13 @@
   "name": "@libstack/server",
   "version": "1.0.0-dev.11",
   "description": "Server",
-  "main": "./dist",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/*"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
     "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "keywords": [
@@ -16,14 +17,13 @@
     "commons"
   ],
   "license": "MIT",
-  "author": "sergiofilhow@gmail.com",
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "dependencies": {
     "@libstack/router": "^1.0.0-dev.2",
     "body-parser": "^1.19.0",
     "config": "^3.2.3",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "lodash": "^4.17.15"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@types/config": "^0.0.35",

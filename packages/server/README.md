@@ -1,43 +1,18 @@
-# Server Commons
-This project is used to create a new NodeJS Express server with use of ECMA6 Decorators, Configuration and Sequelize.
-
-## Environment Variables
-
->- `DB_NAME`: The database name
->- `DB_USERNAME`: The database user
->- `DB_PASSWORD`: The database password
->- `DB_HOST`: The database address
->- `DB_PORT`: The database port
->- `VERBOSE`: `true` if you want to log SQL Statements
->- `DB_DIALECT`: Can be `mysql`, `postgres`, `mariadb`
->- `DB_SOCKET_PATH`: If you want to use socket path
->- `SYNC`: True to auto generate the database
->- `DB_MAX_CONCURRENT_QUERIES`: Max concurrent queries
->- `DB_POOL_MAX_CONNECTIONS`: Max connections to keep on pool
->- `DB_POOL_MIN_CONNECTIONS`: Min connections to keep on pool
->- `DB_POOL_MAX_IDLE_TIME`: Max connections idle
-
-## How to use it
-To use this project you need to pull the following project with the kickstart of a server
-
-### Models
-In Domain Driven Development, we can also call it Repository. How to use it.
+# @libstack/server
 
 ### Routers
 These are the Resources, the REST API. For example this:
 
-```ecmascript 6
-import { RestController, GET, POST, PUT, DELETE } from 'server-commons/router';
-import { NotFoundError } from 'server-commons/errors';
+```typescript
+import { RestController, GET, POST, PUT, DELETE, NotFoundError } from '@libstack/router';
 import AddressService from '../services/AddressService';
-import AddressModel from '../models/AddressModel';
 
 @RestController('/address')
 export default class AddressRouter {
 
   @GET('/:uuid')
   async findAddress({ params }) {
-    const address = await AddressModel.find(params.uuid);
+    const address = await AddressService.find(params.uuid);
     if (!address) throw new NotFoundError('Address not Found');
     return address;
   }
@@ -61,51 +36,34 @@ export default class AddressRouter {
 }
 ```
 
-### Sequelize
-They are the Entities, the objects that are persisted on the database
+### index.ts
 
-```ecmascript 6
-import { DataTypes } from 'sequelize';
+```typescript
+import { Server } from '@libstack/server';
+import './routers/PersonRouter';
 
-const { BIGINT, STRING } = DataTypes;
+const server = new Server();
 
-export default sequelize => {
-  const City = sequelize.define('City', {
-    id: { type: BIGINT, primaryKey: true, autoIncrement: true },
-    name: STRING
-  }, {
-    timestamps: false,
-    tableName: 'geo_city'
-  });
+server.beforeStartup(async () => {
+  // put your async process to run on startup
+});
 
-  City.associate = ({ State }) => {
-    City.belongsTo(State, {
-      as: 'State',
-      foreignKey: 'state_id'
-    });
-  };
-
-  return City;
-};
+export default server;
 ```
 
-### Services
-They have to keep the business logic
+Using `@libstack/server` with `@libstack/sequel`
 
-### index.js
-
-```ecmascript 6
-import Server from 'server-commons/server';
+```typescript
+import { Server } from '@libstack/server';
+import { database } from '@libstack/sequel';
 import { join } from 'path';
+import './routers/PersonRouter';
 
-const server = new Server({
-  routersPath: join(__dirname, 'routers'),
-  modelsPath: join(__dirname, 'sequelize'),
-  migration: {
-    name: 'this-is-your-server-name',
-    dir: join(__dirname, '..', 'db'),
-  },
-});
+const server = new Server();
+
+// this will load all migrations from the migration folder
+database.loadMigrations({ dir: join(__dirname, '..', 'db') });
+server.beforeStartup(database.sync);
 
 export default server;
 ```

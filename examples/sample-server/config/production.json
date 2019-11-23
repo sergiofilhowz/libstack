@@ -1,7 +1,6 @@
 {
   "VERBOSE": false,
   "SYNC": true,
-  "MAX_PAGE": 200,
 
   "PORT": 80,
 

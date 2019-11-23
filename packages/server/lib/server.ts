@@ -9,7 +9,7 @@ export class Server {
   app:Application;
   server:HttpServer;
 
-  private beforeScripts:Array<Function> = [];
+  private readonly beforeScripts:Array<Function> = [];
 
   constructor() {
     this.app = express();
@@ -24,7 +24,11 @@ export class Server {
     this.beforeScripts.push(fn);
   }
 
-  async start() {
+  /**
+   * Start will execute all async beforeScript first
+   * then will start the server at specified port
+   */
+  async start(): Promise<void> {
     for (const fn of this.beforeScripts) {
       await fn();
     }
