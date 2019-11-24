@@ -1,6 +1,7 @@
 import config from 'config';
+import _ from 'lodash';
+
 const cfg = { ...config, ...process.env };
-import * as _ from 'lodash';
 
 /**
  * The main configuration class
@@ -8,9 +9,9 @@ import * as _ from 'lodash';
  * @author Sérgio Marcelino <sergiofilhow@gmail.com>
  */
 export class Config {
-  innerConfig:any;
+  innerConfig: any;
 
-  constructor(cfg:any) {
+  constructor(cfg: any) {
     this.innerConfig = cfg;
   }
 
@@ -19,7 +20,7 @@ export class Config {
    * @param name
    * @param defaultValue in case there's no value configured
    */
-  get(name:string, defaultValue?:string):string {
+  get(name: string, defaultValue?: string): string {
     const result = this.innerConfig[name];
     return _.isUndefined(result) ? defaultValue : result;
   }
@@ -28,7 +29,7 @@ export class Config {
    * Returns true if there's a param with this name in the config
    * @param name
    */
-  has(name:string):boolean {
+  has(name: string): boolean {
     return this.innerConfig[name] !== undefined;
   }
 
@@ -36,7 +37,7 @@ export class Config {
    * Returns true if the param has exactly the value 'true' or boolean true
    * @param name
    */
-  getBoolean(name:string):boolean {
+  getBoolean(name: string): boolean {
     return this.innerConfig[name] === 'true' || this.innerConfig[name] === true
   }
 
@@ -45,7 +46,7 @@ export class Config {
    * @param name
    * @param defaultValue in case there's no value configured
    */
-  getNumber(name:string, defaultValue?:number):number {
+  getNumber(name: string, defaultValue?: number): number {
     const result = this.innerConfig[name];
     if (_.isUndefined(result)) return defaultValue;
     return _.isNumber(result) ? result : _.toNumber(result);
@@ -56,7 +57,7 @@ export class Config {
    * @param name
    * @param value
    */
-  set(name:string, value:string) {
+  set(name: string, value: string) {
     this.innerConfig[name] = value
   }
 }

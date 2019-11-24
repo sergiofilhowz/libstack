@@ -4,15 +4,15 @@ The Libstack Server will help you create NodeJS services using the power of Type
 ## Installing
 
 ```
-npm install @libstack/server
+npm install @libstack/server --save
 ```
 
 ## Architecture
 First let's understand the architecture then we will jump in to the code.
-There are 3 core components on the facade architecture, which are: Config, Routers and the Server.
+There are 3 core components on the `libstack` architecture, which are: Config, Routers and the Server.
 
 ### Config
-This component will help reading config data either from file or from Environment Variables. We usually have some properties that is tied to a specific environment, tests, dev, staging, production, etc.
+This component will help reading config data either from file or from Environment Variables. We usually have some properties that is tied to a specific environment: tests, dev, staging, production, etc.
 So, you can create multiple files, one for each environment `NODE_ENV`. Take a look on the folder described bellow.
 
 ```
@@ -24,7 +24,7 @@ So, you can create multiple files, one for each environment `NODE_ENV`. Take a l
   └ production.json 
 ```
 
-We can see there's a `default.json` file, this one will have properties that are common to most environements, but all of those properties can be overriden either by file or by Environment Variable.
+We can see there's a `default.json` file, this one will have properties that are common to most environments, but all of those properties can be overriden either by file or by Environment Variable.
 The rest or the files will be resolved based on the `proccess.env.NODE_ENV`. You can have as many environment as you want.
 
 #### Using the config
@@ -41,22 +41,31 @@ const numberVar: number = config.getNumber('MY_NUMBER_ENV_VARIABLE', 1);
 
 ### Routers
 Now we need to write the entrance point for our server. It's always good to take a look on the `@libstack/router` documentation.
+
 The `@libstack/router` is part of the `@libstack/server` architecture but can be used standalone.
 
-```
+Take a look on the code bellow. As you can see, there's a decorator `@RestController` that will instantiate the router automatically, so you don't need to call or even assign it to the express instance.
+
+```typescript
+import { RestController, GET } from '@libstack/server';
+import { Request } from 'express';
+
 // This annotation will automatically create the proper express router
 @RestController('/sample')
 export default class SampleRouter {
 
   @GET('/')
-  async getSample({ params }): Promise<{ text: string }> {
+  async getSample(req: Request): Promise<{ text: string }> {
     return { text: 'Sample Router' };
   }
 
 }
 ```
 
+But the file isn't resolved automatically, you need to explicitly import the router on your `server.js` file, in the next session you can see the code to it.
+
 ### Server
+
 The server is the bootstrap, you can configure some startup scripts to be executed before the Server is booted.
 
 ```typescript
@@ -88,3 +97,11 @@ server.beforeStartup(database.sync);
 
 export default server;
 ```
+
+Then all you will need is to create a startpoint file.
+
+```typescript
+import server from './server';
+(async() => server.start())();
+```
+

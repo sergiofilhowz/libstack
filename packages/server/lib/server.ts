@@ -6,10 +6,10 @@ import config from './config';
 import controller from '@libstack/router';
 
 export class Server {
-  app:Application;
-  server:HttpServer;
+  app: Application;
+  server: HttpServer;
 
-  private readonly beforeScripts:Array<Function> = [];
+  private readonly beforeScripts: Array<Function> = [];
 
   constructor() {
     this.app = express();
@@ -20,7 +20,7 @@ export class Server {
     this.app.use('/', controller.router);
   }
 
-  beforeStartup(fn:Function) {
+  beforeStartup(fn: Function) {
     this.beforeScripts.push(fn);
   }
 
@@ -32,7 +32,7 @@ export class Server {
     for (const fn of this.beforeScripts) {
       await fn();
     }
-    const port:number = config.getNumber('PORT') || 8080;
+    const port: number = config.getNumber('PORT') || 8080;
     this.server.listen(port, () => console.log(`Server started at port ${port}`));
   };
 }
