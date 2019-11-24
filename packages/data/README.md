@@ -168,7 +168,7 @@ export class AddressCriteria {
   numbers_higher_than?: number;
 
   @Criteria({ operator: LESS_THAN, property: 'number' })
-  numbers_than_than?: number;
+  numbers_less_than?: number;
 }
 
 export class AddressUuidCriteria {
