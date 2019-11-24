@@ -1,7 +1,7 @@
 import { QueryBuilder } from './query/query.builder';
 
 export type Expression = (expr: string | Expression, ...params: any[]) => void;
-export type Operator = (expression:Expression, property:string, value?: any, queryBuilder?:QueryBuilder<any>) => void;
+export type Operator = (expression: Expression, property: string, value?: any, queryBuilder?: QueryBuilder<any>) => void;
 
 export interface CriteriaOptions {
   /**
@@ -38,7 +38,7 @@ export interface CriteriaConfiguration {
   fields: CriteriaFieldConfiguration[];
 }
 
-function criteria(target: any, propertyName:string, options: CriteriaOptions) {
+function criteria(target: any, propertyName: string, options: CriteriaOptions) {
   if (!Reflect.hasMetadata('criteria', target)) {
     Reflect.defineMetadata('criteria', {
       fields: [],
@@ -46,7 +46,7 @@ function criteria(target: any, propertyName:string, options: CriteriaOptions) {
   }
 
   const propertyType = Reflect.getMetadata('design:type', target, propertyName);
-  const criteria:CriteriaConfiguration = Reflect.getMetadata('criteria', target);
+  const criteria: CriteriaConfiguration = Reflect.getMetadata('criteria', target);
   criteria.fields.push({
     field: propertyName,
     propertyType,

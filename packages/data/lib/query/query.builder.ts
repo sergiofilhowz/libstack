@@ -1,9 +1,9 @@
 import { Association, DataType, ModelCtor } from 'sequelize';
-import { Transformer, ProjectionConfiguration, PropertyConfiguration, PropertyOptions } from '../projection';
-import { Page, Query } from './query';
+import { ProjectionConfiguration, PropertyConfiguration, PropertyOptions, Transformer } from '../projection';
+import { Query } from './query';
 import { getDeletedAtColumn, getTableName, getValue } from './query.utils';
 import _ from 'lodash';
-import { CriteriaRequest } from '../model';
+import { CriteriaRequest, Page } from '../model';
 import { CriteriaConfiguration, CriteriaFieldConfiguration } from '../criteria';
 import squel, { Expression } from 'squel';
 
@@ -24,13 +24,13 @@ type FieldDefinition = {
 export class QueryBuilder<T> {
   readonly query: Query;
 
-  private aliasCount:number = 0;
-  private readonly mainAlias:string;
+  private aliasCount: number = 0;
+  private readonly mainAlias: string;
   private readonly associations: { [key: string]: ModelAssociation; } = {};
   private readonly fields: { [key: string]: FieldDefinition } = {};
-  private readonly projectionConfig:ProjectionConfiguration;
+  private readonly projectionConfig: ProjectionConfiguration;
 
-  constructor(private model:ModelCtor<any>, private projection:{ new(): T; }) {
+  constructor(private model: ModelCtor<any>, private projection: { new(): T; }) {
     this.query = new Query(model.sequelize);
     this.mainAlias = this.createAlias(model.name);
 
@@ -48,35 +48,35 @@ export class QueryBuilder<T> {
     this.build(this.mainAlias, this.model, this.projectionConfig);
   }
 
-  sort(sort:string) {
+  sort(sort: string) {
     if (!sort) return;
 
-    const sortField:string = sort.charAt(0) === '-' ? sort.substr(1) : sort;
-    const sortAscending:boolean = sort.charAt(0) !== '-';
+    const sortField: string = sort.charAt(0) === '-' ? sort.substr(1) : sort;
+    const sortAscending: boolean = sort.charAt(0) !== '-';
     if (!this.fields.hasOwnProperty(sortField)) {
       throw new Error(`Sort field "${sortField}" not found`);
     }
 
     const field: FieldDefinition = this.fields[sortField];
-    this.query.order(`${field.alias}.${field.field}` , sortAscending);
+    this.query.order(`${field.alias}.${field.field}`, sortAscending);
   }
 
-  criteria(criteriaRequest:CriteriaRequest<any>) {
+  criteria(criteriaRequest: CriteriaRequest<any>) {
     if (!criteriaRequest || !criteriaRequest.query) return;
 
     const { reference, query } = criteriaRequest;
 
-    const criteria:CriteriaConfiguration = Reflect.getMetadata('criteria', reference.prototype);
+    const criteria: CriteriaConfiguration = Reflect.getMetadata('criteria', reference.prototype);
     if (!criteria) {
       throw new Error(`The class ${reference.name} is not a Criteria`);
     }
 
-    const expression:Expression = squel.expr();
+    const expression: Expression = squel.expr();
 
-    criteria.fields.forEach((fieldConfig:CriteriaFieldConfiguration) => {
+    criteria.fields.forEach((fieldConfig: CriteriaFieldConfiguration) => {
       const { modelProperty } = fieldConfig;
 
-      const queryValue:any = query[fieldConfig.field];
+      const queryValue: any = query[fieldConfig.field];
       if (queryValue !== undefined && queryValue !== null) {
         let value = queryValue;
         if (fieldConfig.propertyType === Boolean && fieldConfig.options.value !== undefined) {
@@ -117,16 +117,16 @@ export class QueryBuilder<T> {
     return `${name.toLowerCase()}_${this.aliasCount}`;
   }
 
-  private static isProjection(object: any):boolean {
-    const projection:ProjectionConfiguration = Reflect.getMetadata('projection', object);
+  private static isProjection(object: any): boolean {
+    const projection: ProjectionConfiguration = Reflect.getMetadata('projection', object);
     return projection !== undefined;
   }
 
-  private getAssociationInternal(alias:string, property:string, model:ModelCtor<any>, options?:PropertyOptions):ModelAssociation {
+  private getAssociationInternal(alias: string, property: string, model: ModelCtor<any>, options?: PropertyOptions): ModelAssociation {
     if (model.rawAttributes.hasOwnProperty(property)) {
       throw new Error(`Property ${property} field is not an association on model ${model.name}`);
     } else if (model.associations.hasOwnProperty(property)) {
-      const association:Association = model.associations[property];
+      const association: Association = model.associations[property];
       if (!this.associations[property]) {
         const associationAlias = this.createAlias(property);
         this.associations[property] = {
@@ -148,13 +148,13 @@ export class QueryBuilder<T> {
     }
   }
 
-  private getAssociation(alias:string, modelProperty:string, model:ModelCtor<any>, options?:PropertyOptions) {
+  private getAssociation(alias: string, modelProperty: string, model: ModelCtor<any>, options?: PropertyOptions) {
     if (modelProperty.indexOf('.') > 0) {
       const associations = modelProperty.split('.');
-      let lastAssociation:ModelAssociation = null;
+      let lastAssociation: ModelAssociation = null;
       for (let i = 0; i < associations.length - 1; i++) {
         const currentProperty = associations[i];
-        const currentModel:ModelCtor<any> = lastAssociation && lastAssociation.model || model;
+        const currentModel: ModelCtor<any> = lastAssociation && lastAssociation.model || model;
         lastAssociation = this.getAssociation(alias, currentProperty, currentModel, options);
       }
 
@@ -163,8 +163,8 @@ export class QueryBuilder<T> {
     return this.getAssociationInternal(alias, modelProperty, model, options);
   }
 
-  private build(alias:string, model:ModelCtor<any>, projection:ProjectionConfiguration, prefix?:string) {
-    projection.properties.forEach((property:PropertyConfiguration) => {
+  private build(alias: string, model: ModelCtor<any>, projection: ProjectionConfiguration, prefix?: string) {
+    projection.properties.forEach((property: PropertyConfiguration) => {
       const { modelProperty, projectionProperty, options, propertyType } = property;
 
       if (modelProperty.indexOf('.') > 0) {
@@ -197,7 +197,7 @@ export class QueryBuilder<T> {
         const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
 
         if (QueryBuilder.isProjection(propertyType)) {
-          const associationProjection:ProjectionConfiguration = Reflect.getMetadata('projection', propertyType);
+          const associationProjection: ProjectionConfiguration = Reflect.getMetadata('projection', propertyType);
           const newPrefix = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
           this.build(modelAssociation.alias, modelAssociation.model, associationProjection, newPrefix);
         } else {
@@ -209,28 +209,28 @@ export class QueryBuilder<T> {
     });
   }
 
-  async list():Promise<Array<T>> {
-    const list:Array<any> = await this.query.list();
+  async list(): Promise<Array<T>> {
+    const list: Array<any> = await this.query.list();
     return list.map(item => this.mapItem(item));
   }
 
-  async getPage():Promise<Page<T>> {
-    const page:Page<any> = await this.query.getPage();
+  async getPage(): Promise<Page<T>> {
+    const page: Page<any> = await this.query.getPage();
     page.list = page.list.map(item => this.mapItem(item));
     return page;
   }
 
-  async single():Promise<T> {
+  async single(): Promise<T> {
     return this.mapItem(await this.query.single());
   }
 
-  private mapItem(item:any):any {
+  private mapItem(item: any): any {
     if (item === null) return null;
 
     const result = {};
     _.forEach(item, (value: any, key: string) => {
-      const field:FieldDefinition = this.fields[key];
-      const resultValue:any = getValue(field.type, value);
+      const field: FieldDefinition = this.fields[key];
+      const resultValue: any = getValue(field.type, value);
       _.set(result, key, field.transform ? field.transform(resultValue) : resultValue);
     });
     return result;

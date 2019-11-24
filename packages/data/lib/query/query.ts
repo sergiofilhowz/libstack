@@ -1,22 +1,16 @@
 import { Sequelize, Transaction } from 'sequelize';
 import { getBySequelize } from './squel.factory';
 import { BaseBuilder, Expression, FieldOptions, Select } from 'squel';
-
-export interface Page<T> {
-  list: Array<T>;
-  count: number;
-  page: number;
-  pages: number;
-}
+import { Page } from '../model';
 
 export class Query {
   private readonly selectQuery: Select;
   private readonly countQuery: Select;
 
-  private _pageSize:number;
-  private _page:number;
+  private _pageSize: number;
+  private _page: number;
 
-  constructor(private sequelize:Sequelize, private transaction?: Transaction) {
+  constructor(private sequelize: Sequelize, private transaction?: Transaction) {
     const squel = getBySequelize(sequelize);
 
     this.selectQuery = squel.select();
@@ -33,7 +27,7 @@ export class Query {
     return this;
   }
 
-  fields(fields: {[field: string]: string} | string[], options?: FieldOptions): this {
+  fields(fields: { [field: string]: string } | string[], options?: FieldOptions): this {
     this.selectQuery.fields(fields, options);
     return this;
   }
@@ -85,23 +79,23 @@ export class Query {
     return this;
   }
 
-  group(field:string): this {
+  group(field: string): this {
     this.selectQuery.group(field);
     this.countQuery.group(field);
     return this;
   }
 
-  limit(limit:number): this {
+  limit(limit: number): this {
     this.selectQuery.limit(limit);
     return this;
   }
 
-  offset(offset:number): this {
+  offset(offset: number): this {
     this.selectQuery.offset(offset);
     return this;
   }
 
-  async getPage():Promise<Page<any>> {
+  async getPage(): Promise<Page<any>> {
     const pageSize = this._pageSize;
     const page = this._page;
     const [result, count] = await Promise.all([this.list(), this.count()]);
@@ -113,7 +107,7 @@ export class Query {
     };
   }
 
-  size(size: number):this {
+  size(size: number): this {
     if (size === undefined || size === null) return this;
 
     this._pageSize = size;
@@ -121,38 +115,38 @@ export class Query {
     return this;
   }
 
-  page(page:number, size:number): this {
+  page(page: number, size: number): this {
     this.size(size);
     this._page = page;
     this.offset((page - 1) * size);
     return this;
   }
 
-  async list():Promise<Array<any>> {
+  async list(): Promise<Array<any>> {
     const { text, values } = this.selectQuery.toParam();
-    const [result]:any = await this.sequelize.query(text, {
+    const [result]: any = await this.sequelize.query(text, {
       replacements: values,
       transaction: this.transaction
     });
     return result;
   };
 
-  async single():Promise<any> {
+  async single(): Promise<any> {
     const { text, values } = this.selectQuery.limit(1).toParam();
-    const [result]:any = await this.sequelize.query(text, {
+    const [result]: any = await this.sequelize.query(text, {
       replacements: values,
       transaction: this.transaction
     });
     return result.length ? result[0] : null;
   }
 
-  async count():Promise<number> {
+  async count(): Promise<number> {
     const { text, values } = this.countQuery.toParam();
-    const query = 'SELECT COUNT(*) as count FROM (' + text + ') c';
-    const [countResult]:any = await this.sequelize.query(query, {
+    const query: string = `SELECT COUNT(*) as cnt FROM (${text}) c`;
+    const [countResult]: any = await this.sequelize.query(query, {
       replacements: values,
       transaction: this.transaction
     });
-    return parseInt(countResult[0].count, 10);
+    return parseInt(countResult[0].cnt, 10);
   }
 }

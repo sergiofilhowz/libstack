@@ -18,18 +18,18 @@ export interface ProjectionConfiguration {
   options?: ProjectionOptions;
 }
 
-function projection(target:any, options?:ProjectionOptions) {
+function projection(target: any, options?: ProjectionOptions) {
   if (!Reflect.hasMetadata('projection', target.prototype)) {
     throw new Error(`Class ${target.name} has a @Projection but is missing a @Property`);
   } else {
-    const projection:ProjectionConfiguration = Reflect.getMetadata('projection', target.prototype);
+    const projection: ProjectionConfiguration = Reflect.getMetadata('projection', target.prototype);
     projection.options = options;
     Reflect.defineMetadata('projection', projection, target);
   }
 }
 
 export type JoinType = 'left' | 'right';
-export type Transformer = (value:any) => any;
+export type Transformer = (value: any) => any;
 
 export interface PropertyOptions {
   property?: string;
@@ -61,7 +61,7 @@ export function Property(...args: any[]): void | Function {
   };
 }
 
-function property(target: any, propertyName: string, options?:PropertyOptions) {
+function property(target: any, propertyName: string, options?: PropertyOptions) {
   if (!Reflect.hasMetadata('projection', target)) {
     Reflect.defineMetadata('projection', {
       properties: [],
@@ -70,7 +70,7 @@ function property(target: any, propertyName: string, options?:PropertyOptions) {
   }
 
   const type = Reflect.getMetadata('design:type', target, propertyName);
-  const projection:ProjectionConfiguration = Reflect.getMetadata('projection', target);
+  const projection: ProjectionConfiguration = Reflect.getMetadata('projection', target);
   projection.properties.push({
     projectionProperty: propertyName,
     modelProperty: options && options.property || propertyName,

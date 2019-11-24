@@ -1,6 +1,12 @@
 import { ModelCtor } from 'sequelize-typescript';
 import { QueryBuilder } from './query/query.builder';
-import { Page } from './query/query';
+
+export interface Page<T> {
+  list: Array<T>;
+  count: number;
+  page: number;
+  pages: number;
+}
 
 /**
  * This object represents a request with criteria

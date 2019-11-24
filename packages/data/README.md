@@ -150,7 +150,7 @@ const result:Array<AddressResponse> = await dataModel.list({
 ```
 
 ## Filtering
-And what about filtering? You can define criterias which are filters, some can be optional, some can be required.
+And what about filtering? You can define criterias which are filters and some can be optional, some can be required.
 
 ```typescript
 import { Criteria, Operators } from '@libstack/data';
@@ -202,7 +202,7 @@ let result: AddressResponse = await dataModel.single({
 ```
 
 ## Sorting
-All properties you defined are sortable. All you need to do is use the sort on list. 
+All properties you define are sortable. All you need to do is use the sort on list. 
 
 ```typescript
 let result: AddressResponse [] = await dataModel.list({
@@ -221,3 +221,15 @@ const result:Page<AddressResponse> = await dataModel.page({
   projection: AddressResponse,
 });
 ```
+
+A page have the following properties
+
+```json
+{
+  "list": [],
+  "count": 0,
+  "page": 1,
+  "pages": 0
+}
+```
+
