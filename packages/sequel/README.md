@@ -1,111 +1,113 @@
-# Server Commons
-This project is used to create a new NodeJS Express server with use of ECMA6 Decorators, Configuration and Sequelize.
+# @libstack/sequel
+Adds sequelize integration to your `@libstack/server`.
 
-## Environment Variables
+## Installing
 
->- `DB_NAME`: The database name
->- `DB_USERNAME`: The database user
->- `DB_PASSWORD`: The database password
->- `DB_HOST`: The database address
->- `DB_PORT`: The database port
->- `VERBOSE`: `true` if you want to log SQL Statements
->- `DB_DIALECT`: Can be `mysql`, `postgres`, `mariadb`
->- `DB_SOCKET_PATH`: If you want to use socket path
->- `SYNC`: True to auto generate the database
->- `DB_MAX_CONCURRENT_QUERIES`: Max concurrent queries
->- `DB_POOL_MAX_CONNECTIONS`: Max connections to keep on pool
->- `DB_POOL_MIN_CONNECTIONS`: Min connections to keep on pool
->- `DB_POOL_MAX_IDLE_TIME`: Max connections idle
+```
+npm install @libstack/sequel --save
+```
 
-## How to use it
-To use this project you need to pull the following project with the kickstart of a server
+## New env variables
+>- `VERBOSE`: When true, SQL will be logged to console
+>- `SYNC`: This variable indicates to execute the syncronization process
+>- `DB_DIALECT`: Sequelize database dialect
+>- `DB_HOST`: Sequelize database address
+>- `DB_PORT`: Sequelize database port
+>- `DB_NAME`: Sequelize database name
+>- `DB_USERNAME`: Sequelize database user
+>- `DB_PASSWORD`: Sequelize database password
+>- `DB_POOL_MAX_CONNECTIONS`: Max connections on pool
+>- `DB_POOL_MAX_IDLE_TIME`: Max idle time for connections on pool
+>- `DB_MAX_CONCURRENT_QUERIES`: Max concurrent queries on sequelize
 
-### Models
-In Domain Driven Development, we can also call it Repository. How to use it.
+## Link Models to Sequelize
+This module provides a way to automatically add your models to the main sequelize instance.
 
-### Routers
-These are the Resources, the REST API. For example this:
+```typescript
+import { IsUUID, Model, PrimaryKey, Table, Column, Length } from 'sequelize-typescript';
+import { SequelizeModel } from '@libstack/sequel';
 
-```ecmascript 6
-import { RestController, GET, POST, PUT, DELETE } from 'server-commons/router';
-import { NotFoundError } from 'server-commons/errors';
-import AddressService from '../services/AddressService';
-import AddressModel from '../models/AddressModel';
+@SequelizeModel // just use this decorator and the model will be added to sequelize
+@Table({ tableName: 'person' })
+export class Person extends Model<Person> {
 
-@RestController('/address')
-export default class AddressRouter {
+  @IsUUID("4")
+  @PrimaryKey
+  @Column
+  id: string;
 
-  @GET('/:uuid')
-  async findAddress({ params }) {
-    const address = await AddressModel.find(params.uuid);
-    if (!address) throw new NotFoundError('Address not Found');
-    return address;
-  }
+  @Length({ min: 3, max: 32 })
+  @Column
+  first_name: string;
 
-  @POST('/')
-  async createAddress({ body }) {
-    const address = await AddressService.create(body);
-    return AddressModel.find(address.uuid);
-  }
+  @Length({ min: 3, max: 32 })
+  @Column
+  last_name: string;
 
-  @PUT('/:uuid')
-  async updateAddress({ params, body }) {
-    await AddressService.update(params.uuid, body);
-  }
-
-  @DELETE('/:uuid')
-  async deleteAddress({ params }) {
-    await AddressService.deleteAddress(params.uuid);
-  }
+  @Column
+  age: number;
 
 }
 ```
 
-### Sequelize
-They are the Entities, the objects that are persisted on the database
+## Migration
+The migration is done through raw SQL files, which gives more control on what you are modifying on the database.
+You will need to create a folder with the supported dialects as subfolders, for example:
 
-```ecmascript 6
-import { DataTypes } from 'sequelize';
-
-const { BIGINT, STRING } = DataTypes;
-
-export default sequelize => {
-  const City = sequelize.define('City', {
-    id: { type: BIGINT, primaryKey: true, autoIncrement: true },
-    name: STRING
-  }, {
-    timestamps: false,
-    tableName: 'geo_city'
-  });
-
-  City.associate = ({ State }) => {
-    City.belongsTo(State, {
-      as: 'State',
-      foreignKey: 'state_id'
-    });
-  };
-
-  return City;
-};
+```
+└ db/
+  ├ postgres/
+  └ mysql/ 
 ```
 
-### Services
-They have to keep the business logic
+Then, add the scripts with the given format name:
 
-### index.js
+```
+└ db/
+  ├ postgres/
+    └ V20191123130301__create.sql
+```
 
-```ecmascript 6
-import Server from 'server-commons/server';
+Which means:
+
+```
+V{YYYY}{MM}{DD}{HH}{mm}{SS}__{script_name}.sql
+```
+
+Migration scripts will be executed on the chronological order.
+
+Then you need to load the migrations on `@libstack/sequel`
+
+```typescript
+import { database } from '@libstack/sequel';
 import { join } from 'path';
 
-const server = new Server({
-  routersPath: join(__dirname, 'routers'),
-  modelsPath: join(__dirname, 'sequelize'),
-  migration: {
-    name: 'this-is-your-server-name',
-    dir: join(__dirname, '..', 'db'),
-  },
-});
-
-export default server;
+database.loadMigrations({ dir: join(__dirname, '..', 'db') });
 ```
+
+And on `@libstack/server` you will need to configure a prestart script
+
+```typescript
+import { Server } from '@libstack/server';
+import { database } from '@libstack/sequel';
+
+const server: Server = new Server();
+server.beforeStartup(database.sync);
+```
+
+### Syncing manually
+You can manually sync database, mostly used on tests
+
+```typescript
+import { database } from '@libstack/sequel';
+
+describe('My Test Case', () => {
+  /* the clear is a property that, when set to true, will erase the database then sync again
+   * this is important to not have tests with side effects
+   * but this flag can only be used if the NODE_ENV is `test`. */
+  before(() => database.sync({ clear: true }));
+});
+```
+
+
+

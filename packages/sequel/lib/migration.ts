@@ -1,9 +1,16 @@
-import { Sequelize, DataTypes } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 import path from 'path';
 import { keyBy, sortBy } from 'lodash';
 import { readdirSync, readFileSync } from 'fs';
 
+/**
+ * This is the migration options, you will need to define the absolute
+ * path for the migration folder.
+ */
 export interface MigrationOptions {
+  /**
+   * Absolute path to the migration folder
+   */
   dir: string;
 }
 
@@ -14,7 +21,7 @@ export default class SequelizeMigration {
 
   Migration: any;
 
-  constructor(sequelize:Sequelize) {
+  constructor(sequelize: Sequelize) {
     this.sequelize = sequelize;
     this.dialectName = sequelize.getDialect();
 
@@ -35,7 +42,7 @@ export default class SequelizeMigration {
   /**
    * Creates a new Migration module
    */
-  addModule(options:MigrationOptions) {
+  addModule(options: MigrationOptions) {
     this.modules.push(options);
   };
 
@@ -52,7 +59,7 @@ export default class SequelizeMigration {
   private async syncModule(moduleDescriptor: MigrationOptions) {
     const { dialectName } = this;
     const migrations = await this.Migration.findAll({
-      order: [ ['script_name', 'ASC'] ]
+      order: [['script_name', 'ASC']]
     });
 
     const migrationsMap = migrations && keyBy(migrations, 'script_name') || {};

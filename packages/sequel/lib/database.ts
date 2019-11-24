@@ -30,8 +30,8 @@ export interface DatabaseOptions {
 }
 
 export class Database {
-  sequelize:Sequelize;
-  migration:SequelizeMigration;
+  sequelize: Sequelize;
+  migration: SequelizeMigration;
 
   constructor(options: DatabaseOptions) {
     this.sequelize = new Sequelize(options.database, options.username, options.password, {
@@ -74,7 +74,11 @@ export class Database {
     this.migration = new SequelizeMigration(this.sequelize);
   }
 
-  loadMigrations(options:MigrationOptions) {
+  /**
+   * Use this to add migrations to a Database
+   * @param options
+   */
+  loadMigrations(options: MigrationOptions) {
     this.migration.addModule(options);
   }
 

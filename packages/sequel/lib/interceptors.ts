@@ -4,15 +4,16 @@ import { Request, Response } from 'express';
 
 @RestInterceptor
 class ValidationInterceptor implements Interceptor {
-  intercepts(parameters:any, request:Request): boolean {
+  intercepts(parameters: any, request: Request): boolean {
     return true;
   }
-  async execute(parameters:any, req:Request, res:Response, stack:CallableStack): Promise<any> {
+
+  async execute(parameters: any, req: Request, res: Response, stack: CallableStack): Promise<any> {
     try {
       return await stack.next();
     } catch (err) {
       if (err instanceof ValidationError) {
-        const errors:any = {};
+        const errors: any = {};
         for (let error of err.errors) {
           let field = errors[error.path];
           if (!field) {
