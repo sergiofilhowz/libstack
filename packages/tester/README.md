@@ -72,12 +72,12 @@ class AuthenticationDecorator implements RequestDecorator {
 
   /*
    * Let's store the authentication data on the class
- 	 */
+   */
   constructor(private user: string, private pass: string) {}
 
   /*
    * Now let's create a business logic to perform login and return the JWT bearer
- 	 */
+   */
   private async performLogin(): Promise<string> {
     // business logic to perform a login and return the JWT bearer token
     return 'c2VyZ2lvZmlsaG93QGdtYWlsLmNvbQ==';
