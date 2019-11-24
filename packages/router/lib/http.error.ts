@@ -9,8 +9,8 @@
  * @typedef {Error} HttpError
  */
 export class HttpError extends Error {
-  code:number;
-  data?:any;
+  code: number;
+  data?: any;
 
   constructor(message: string, code: number, data?: any) {
     super(message);
@@ -49,7 +49,7 @@ export class NotFoundError extends HttpError {
  * The UnauthorizedError object
  */
 export class UnauthorizedError extends HttpError {
-  constructor(message:string, data?:any) {
+  constructor(message: string, data?: any) {
     super(message, 401, data);
   }
 }
@@ -58,7 +58,7 @@ export class UnauthorizedError extends HttpError {
  * The Forbidden object
  */
 export class ForbiddenError extends HttpError {
-  constructor(message:string, data?:any) {
+  constructor(message: string, data?: any) {
     super(message, 403, data);
   }
 }

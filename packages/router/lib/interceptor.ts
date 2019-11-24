@@ -60,6 +60,15 @@ export interface Interceptor {
   execute(parameters: any, req: Request, res: Response, stack: CallableStack): Promise<any>;
 }
 
+/**
+ * This is the interceptor execution stack. All interceptors
+ * are linked withing the Callable Stack and in order to continue
+ * the execution you need to call next(). If you don't call next() it will
+ * halt the request stack.
+ */
 export interface CallableStack {
+  /**
+   * Calls the next execution, the last one will be the request itself.
+   */
   next(): Promise<any>;
 }
