@@ -8,8 +8,8 @@
     "dist/*"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts --exit"
+    "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
+    "test": "SUPPRESS_NO_CONFIG_WARNING=true mocha -r ts-node/register test/**/*.test.ts --exit"
   },
   "keywords": [
     "node",
