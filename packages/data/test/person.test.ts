@@ -10,7 +10,7 @@ import PersonModel, {
   PersonSingleCriteria
 } from './models/PersonModel';
 import { City } from './sequelize/City';
-import { Page } from '../lib/query/query';
+import { Page } from '../lib/model';
 
 describe('Model', () => {
   before(() => database.sync({ clear: true }));

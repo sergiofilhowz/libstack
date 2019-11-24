@@ -1,4 +1,4 @@
-import { Model, Property, Projection, Criteria, Operators } from '@libstack/data';
+import { DataModel, Property, Projection, Criteria, Operators } from '@libstack/data';
 import { Person } from '../sequelize/Person';
 
 const { EQUAL, GREATER_THAN, ILIKE, LESS_THAN } = Operators;
@@ -35,7 +35,7 @@ export class PersonSingleCriteria {
   id: string;
 }
 
-class PersonModel extends Model {
+class PersonModel extends DataModel {
   constructor() {
     super(Person);
   }

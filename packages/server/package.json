@@ -1,7 +1,7 @@
 {
   "name": "@libstack/server",
-  "version": "1.0.0-dev.11",
-  "description": "Server",
+  "version": "1.0.0-rc.1",
+  "description": "Libstack Server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -23,7 +23,7 @@
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "dependencies": {
-    "@libstack/router": "^1.0.0-dev.2",
+    "@libstack/router": "^1.0.0-rc.1",
     "body-parser": "^1.19.0",
     "config": "^3.2.3",
     "cors": "^2.8.5",

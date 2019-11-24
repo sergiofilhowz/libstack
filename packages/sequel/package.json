@@ -1,8 +1,9 @@
 {
   "name": "@libstack/sequel",
-  "version": "1.0.0-dev.8",
-  "description": "Sequel",
-  "main": "./dist",
+  "version": "1.0.0-rc.1",
+  "description": "Libstack Server - Sequelize Integration",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/*"
   ],
@@ -22,8 +23,10 @@
   ],
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
+  "peerDependencies": {
+    "@libstack/server": "^1.0.0-rc.1"
+  },
   "dependencies": {
-    "@libstack/router": "^1.0.0-dev.2",
     "reflect-metadata": "^0.1.13",
     "sequelize": "5.15.1",
     "sequelize-typescript": "^1.0.0"

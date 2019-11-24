@@ -1,6 +1,6 @@
 {
   "name": "@libstack/router",
-  "version": "1.0.0-dev.2",
+  "version": "1.0.0-rc.1",
   "description": "An extreme powerful Express Routing machine",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

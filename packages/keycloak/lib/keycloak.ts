@@ -2,7 +2,7 @@ import axios from 'axios';
 import querystring from 'query-string';
 import _ from 'lodash';
 import { Request, Response } from 'express';
-import { CallableStack, ForbiddenError, Interceptor, RestInterceptor, UnauthorizedError } from '@libstack/router';
+import { CallableStack, ForbiddenError, Interceptor, RestInterceptor, UnauthorizedError } from '@libstack/server';
 import { config, Config } from '@libstack/server';
 
 const validateTokenConfig = {
