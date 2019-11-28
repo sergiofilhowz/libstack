@@ -7,10 +7,10 @@
   ],
   "verbose": true,
   "execMap": {
-    "ts": "node --require ts-node/register"
+    "js": "node"
   },
   "watch": [
-    "src/"
+    "dist/"
   ],
   "env": {
     "NODE_ENV": "development"

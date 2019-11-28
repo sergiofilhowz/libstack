@@ -5,7 +5,7 @@ import './routers/PersonRouter';
 
 const server = new Server();
 
-database.loadMigrations({ dir: join(__dirname, '..', 'db') });
+database.loadMigrations({ dir: join(process.cwd(), 'src', 'db') });
 server.beforeStartup(database.sync);
 
 export default server;
