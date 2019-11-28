@@ -8,6 +8,31 @@ body {
     background: #3a2d7b;
 }
 
+@media only screen and (max-width: 735px) {
+    .headerTitleWithLogo {
+        display: block !important;
+    }
+    .imageAlignSide .blockImage {
+        display: block !important;
+    }
+
+    .blockElement.imageAlignSide.imageAlignRight {
+        flex-direction: column-reverse;
+    }
+    .blockElement.imageAlignSide.imageAlignLeft {
+        flex-direction: column;
+    }
+    .blockElement h2 {
+        text-align: center !important;
+    }
+
+    .blockElement.imageAlignSide .blockImage {
+        flex: 1;
+        margin: 0;
+    }
+}
+
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
