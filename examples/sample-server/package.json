@@ -7,7 +7,8 @@
     "production": "cross-env NODE_ENV=production node src/node/server.js",
     "build": "rm -rf dist/ && npx tsc --diagnostics -p tsconfig.json",
     "test": "cross-env NODE_ENV=test mocha --timeout 15000 --exit -r ts-node/register test/**/*.test.ts",
-    "start": "nodemon dist/src/node/server.ts",
+    "start": "npm run watch & npm run nodemon",
+    "nodemon": "nodemon dist/src/node/server.js",
     "watch": "npx tsc --watch"
   },
   "keywords": [],

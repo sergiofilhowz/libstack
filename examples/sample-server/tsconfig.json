@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "incremental": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
