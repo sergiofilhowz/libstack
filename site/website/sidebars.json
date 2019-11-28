@@ -1,0 +1,18 @@
+{
+  "docs": {
+    "Libstack": [
+      "libstack",
+      "getting-started",
+      "building"
+    ],
+    "Modules": [
+      "modules/libstack-router",
+      "modules/libstack-tester",
+      "modules/libstack-sequel",
+      "modules/libstack-data"
+    ]
+  },
+  "docs-other": {
+    "First Category": ["doc4", "doc5"]
+  }
+}

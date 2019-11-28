@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Getting Started · Libstack</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Installing"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Getting Started · Libstack"/><meta property="og:type" content="website"/><meta property="og:url" content="https://libstack.github.io/docs/"/><meta property="og:description" content="## Installing"/><meta property="og:image" content="https://libstack.github.io/docs/img/libstack.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://libstack.github.io/docs/img/libstack.png"/><link rel="shortcut icon" href="/docs/img/libstack.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-153496698-1', 'auto');
+              ga('send', 'pageview');
+            </script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,500,600,700"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs/css/main.css"/><script src="/docs/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs/"><img class="logo" src="/docs/img/libstack.svg" alt="Libstack"/><h2 class="headerTitleWithLogo">Libstack</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/docs/libstack" target="_self">Docs</a></li><li class=""><a href="/docs/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Libstack</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Libstack</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/libstack">Understanding Libstack</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/building">Building for Production</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Modules</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-router">@libstack/router</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-tester">@libstack/tester</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-sequel">@libstack/sequel</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-data">@libstack/data</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Getting Started</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="installing"></a><a href="#installing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installing</h2>
+<p>To start using Libstack we recommend pulling the example server (With SQL).</p>
+<blockquote>
+<p>The repository is located here: <a href="https://github.com/sergiofilhowz/libstack/tree/master/examples/sample-server">https://github.com/sergiofilhowz/libstack/tree/master/examples/sample-server</a></p>
+</blockquote>
+<p>But let's understand what's inside and why.</p>
+<h2><a class="anchor" aria-hidden="true" id="file-structure"></a><a href="#file-structure" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>File structure</h2>
+<p>The file structure will look like this</p>
+<pre><code class="hljs">├── config/
+│   ├── default.json
+│   ├── test.json 
+│   ├── development.json 
+│   └── production.json 
+├── src/
+│   ├── db/
+│   │   └── postgres/
+│   │       └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">V20191128140100__create_schema</span>.</span></span>sql
+│   └── node/
+│       ├── models/
+│       │   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">PersonModel</span>.</span></span>ts
+│       ├── routers/
+│       │   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">PersonRouter</span>.</span></span>ts
+│       ├── sequelize/
+│       │   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Person</span>.</span></span>ts
+│       ├── services/
+│       │   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">PersonService</span>.</span></span>ts
+│       ├── index.ts
+│       └── server.ts
+└── test/
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">TestHelper</span>.</span></span>ts 
+    └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">PersonRouter</span>.</span></span>test.ts
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="config-folder"></a><a href="#config-folder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Config Folder</h3>
+<p>Inside the config folder there are all files with predefined env variables for each environment.</p>
+<blockquote>
+<p><strong>NOTE:</strong> Sensitive variables, like database password must not be on the files for production environments</p>
+</blockquote>
+<h3><a class="anchor" aria-hidden="true" id="src-folder"></a><a href="#src-folder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Src folder</h3>
+<p>Inside source we will put SQL files to be executed automatically and typescript files for the server, those files are all meant for production.</p>
+<h3><a class="anchor" aria-hidden="true" id="inside-source-folder"></a><a href="#inside-source-folder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inside Source Folder</h3>
+<p>We have four folders inside node. One of each layer of the application.</p>
+<ul>
+<li><strong>Models</strong>: Files inside will be the data models from <code>@libstack/data</code>.</li>
+<li><strong>Routers</strong>: Files inside will be the routes from <code>@libstack/router</code>.</li>
+<li><strong>Sequelize</strong>: Files inside will be sequelize models.</li>
+<li><strong>Service</strong>: Files inside will contain the business logic of your application.</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="test-folder"></a><a href="#test-folder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Test folder</h3>
+<p>All tests from your application should be located here.</p>
+<h4><a class="anchor" aria-hidden="true" id="testhelperts"></a><a href="#testhelperts" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>TestHelper.ts</h4>
+<p>Inside this file you should put the common business logic to test your application. Like authenticating before performing a request and so.
+More details about it can be referred on @libstack/tester section.</p>
+<h2><a class="anchor" aria-hidden="true" id="starting-the-application"></a><a href="#starting-the-application" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Starting the Application</h2>
+<p>The application is ready to be started. But first you need to either configure the <code>config/development.json</code> file or start the database with <code>docker-compose.yml</code> file located on the root folder</p>
+<p>But first you will need to load your dependencies.</p>
+<pre><code class="hljs">$ npm <span class="hljs-keyword">install</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="starting-external-services"></a><a href="#starting-external-services" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Starting external services</h3>
+<p>To start external services from docker compose you need to have docker installed in your machine.</p>
+<pre><code class="hljs"><span class="hljs-variable">$ </span>docker-compose up
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="starting-the-application-1"></a><a href="#starting-the-application-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Starting the Application</h3>
+<p>After all external services are started, you can then start your application.</p>
+<pre><code class="hljs">$ <span class="hljs-built_in">npm</span> start
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="testing-the-application"></a><a href="#testing-the-application" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing the Application</h3>
+<p>After all external services are started, you can also test your application. Remember the tests are integration tests and runs on a real database, which is recommended because you can be sure the modifications will work on production.</p>
+<pre><code class="hljs"><span class="hljs-meta">$</span><span class="bash"> npm <span class="hljs-built_in">test</span></span>
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/docs/libstack"><span class="arrow-prev">← </span><span>Understanding Libstack</span></a><a class="docs-next button" href="/docs/docs/building"><span>Building for Production</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#installing">Installing</a></li><li><a href="#file-structure">File structure</a><ul class="toc-headings"><li><a href="#config-folder">Config Folder</a></li><li><a href="#src-folder">Src folder</a></li><li><a href="#inside-source-folder">Inside Source Folder</a></li><li><a href="#test-folder">Test folder</a></li></ul></li><li><a href="#starting-the-application">Starting the Application</a><ul class="toc-headings"><li><a href="#starting-external-services">Starting external services</a></li><li><a href="#starting-the-application-1">Starting the Application</a></li><li><a href="#testing-the-application">Testing the Application</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/docs/" class="nav-home"><img src="/docs/img/libstack-white.svg" alt="Libstack" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/docs/libstack.html">Understanding Libstack</a><a href="/docs/docs/getting-started.html">Getting Started</a></div><div><h5>Community</h5><a href="https://twitter.com/sergiofilhow" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="https://github.com/sergiofilhowz/libstack">GitHub</a><a class="github-button" href="https://github.com/sergiofilhowz/libstack" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/docs/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Sérgio Marcelino</section></footer></div></body></html>

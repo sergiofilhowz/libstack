@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>@libstack/router · Libstack</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="An extreme powerful Express Routing machine"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="@libstack/router · Libstack"/><meta property="og:type" content="website"/><meta property="og:url" content="https://libstack.github.io/docs/"/><meta property="og:description" content="An extreme powerful Express Routing machine"/><meta property="og:image" content="https://libstack.github.io/docs/img/libstack.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://libstack.github.io/docs/img/libstack.png"/><link rel="shortcut icon" href="/docs/img/libstack.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-153496698-1', 'auto');
+              ga('send', 'pageview');
+            </script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,500,600,700"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs/css/main.css"/><script src="/docs/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs/"><img class="logo" src="/docs/img/libstack.svg" alt="Libstack"/><h2 class="headerTitleWithLogo">Libstack</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/docs/libstack" target="_self">Docs</a></li><li class=""><a href="/docs/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Modules</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Libstack</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/libstack">Understanding Libstack</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/building">Building for Production</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Modules</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/modules/libstack-router">@libstack/router</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-tester">@libstack/tester</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-sequel">@libstack/sequel</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/modules/libstack-data">@libstack/data</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">@libstack/router</h1></header><article><div><span><p>An extreme powerful Express Routing machine</p>
+<h2><a class="anchor" aria-hidden="true" id="what-is-it-"></a><a href="#what-is-it-" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is it ?</h2>
+<p>This module adds the async/await to your express app.
+In addition to promise, you can add endpoint configurations so you can intercept the request and do
+everything you want.</p>
+<h2><a class="anchor" aria-hidden="true" id="installation"></a><a href="#installation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h2>
+<pre><code class="hljs"><span class="hljs-built_in">npm</span> install @libstack/router --save
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="usage"></a><a href="#usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage</h2>
+<p>You can create routes and interceptors. Let's first take a look on how to create routers.</p>
+<h3><a class="anchor" aria-hidden="true" id="routers"></a><a href="#routers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Routers</h3>
+<p>Routers are entrypoints on your application, you can define one with multiple endpoints, which have the default start path from the router.</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { RestController, GET, POST, BadRequestError } <span class="hljs-keyword">from</span> <span class="hljs-string">'@libstack/router'</span>;
+<span class="hljs-comment">// Supported methods: GET, POST, PUT, DELETE</span>
+
+<span class="hljs-meta">@RestController</span>(<span class="hljs-string">'/myController'</span>)
+<span class="hljs-keyword">class</span> TestRouter {
+
+  <span class="hljs-comment">// The second argument is used for Interceptors (will be described in the next section)</span>
+  <span class="hljs-meta">@GET</span>(<span class="hljs-string">'/'</span>, { addProperty: <span class="hljs-literal">true</span> })
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">get</span>() {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> someModule.execAsyncCall();
+    <span class="hljs-keyword">return</span> result; 
+  }
+
+  <span class="hljs-meta">@GET</span>(<span class="hljs-string">'/customEnd'</span>)
+  <span class="hljs-keyword">async</span> customEnd(req:Request, res:Response) {
+    res.end(<span class="hljs-string">'my custom end'</span>);
+    <span class="hljs-comment">// you can define the response you want by just calling res.end (from the express)</span>
+  }
+
+  <span class="hljs-meta">@POST</span>(<span class="hljs-string">'/throwError'</span>)
+  <span class="hljs-keyword">async</span> throwError() {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> BadRequestError(<span class="hljs-string">'My error message'</span>);
+    <span class="hljs-comment">// this error, when thrown, will return a 400 status code with this structure</span>
+    <span class="hljs-comment">// { "message": "My error message" }</span>
+  }
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="interceptors"></a><a href="#interceptors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Interceptors</h3>
+<p>So, what is exactly an interceptor? Interceptors are business logics that needs to be executed on specific endpoints or all endpoits, it's up to you. Examples of interceptors are:</p>
+<ul>
+<li><strong>Error Interceptor</strong>: Interceptor to catch one specific Error and return data to the API</li>
+<li><strong>Validation Interceptor</strong>: Catch body and check if the request is valid</li>
+<li><strong>Authentication Interceptor</strong>: Used to allow only authenticated users</li>
+<li><strong>ACL Interceptor</strong>: Used to allow only authenticated users that have roles to perform a request</li>
+</ul>
+<p>Alright, so how can we create interceptors? So, let's give an example of interceptor that adds a property to the response body (just an example).</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { Request, Response } <span class="hljs-keyword">from</span> <span class="hljs-string">'express'</span>;
+<span class="hljs-keyword">import</span> { UnauthorizedError, CallableStack, Interceptor, RestInterceptor } <span class="hljs-keyword">from</span> <span class="hljs-string">'@libstack/router'</span>;
+<span class="hljs-keyword">import</span> { getUserData, User } <span class="hljs-keyword">from</span> <span class="hljs-string">'./MyUserService'</span>;
+
+<span class="hljs-meta">@RestInterceptor</span>
+<span class="hljs-keyword">class</span> ChangeResponseInterceptor <span class="hljs-keyword">implements</span> Interceptor {
+  <span class="hljs-comment">/**
+    * This method will be called on every request and the parameters are defined
+    * on the second argument on @GET @POST @PUT and @DELETE decorators
+    */</span>
+  intercepts(parameters: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-comment">// so, for example, we created an interceptor that intercepts ALL requests</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-comment">/**
+    * This method will only be executed if the condition on `intercepts` is true
+    */</span>
+  <span class="hljs-keyword">async</span> execute(parameters: <span class="hljs-built_in">any</span>, req: Request, res: Response, stack: CallableStack): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; {
+    <span class="hljs-comment">/*
+     * What exactly is this stack?
+     * This is the interceptor execution stack. All interceptors
+     * are linked within the Callable Stack and in order to continue
+     * the execution you need to call next(). If you don't call next() it will
+     * halt the request stack.
+     */</span>
+    <span class="hljs-keyword">const</span> response: <span class="hljs-built_in">any</span> = <span class="hljs-keyword">await</span> stack.next();
+    
+    <span class="hljs-comment">// here we are changing the response</span>
+    <span class="hljs-keyword">if</span> (response) {
+      response.hello = <span class="hljs-string">'Hello World'</span>;
+    }
+    <span class="hljs-keyword">return</span> response; <span class="hljs-comment">// if you don't return, there will be no response</span>
+  }
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="errors"></a><a href="#errors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Errors</h3>
+<p>There are some predefined errors on the module</p>
+<ul>
+<li><code>BadRequestError</code>: Will return <code>400</code></li>
+<li><code>NotFoundError</code>: Will return <code>404</code></li>
+<li><code>UnauthorizedError</code>: Will return <code>401</code></li>
+<li><code>ForbiddenError</code>: Will return <code>403</code></li>
+</ul>
+<p>But you can also create your own HTTP error by just extending <code>HttpError</code></p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { HttpError } <span class="hljs-keyword">from</span> <span class="hljs-string">'@libstack/router'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> UnauthorizedError <span class="hljs-keyword">extends</span> HttpError {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">message: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>) {
+    <span class="hljs-keyword">super</span>(message, <span class="hljs-number">401</span>, data);
+  }
+}
+</code></pre>
+<p>As you can see, there's a <code>data</code> property on HttpErrors, they are used to send additional information about the error, for example, validation error must return which fields weren't properly set.</p>
+<h2><a class="anchor" aria-hidden="true" id="linking-libstackrouter-on-your-express-application"></a><a href="#linking-libstackrouter-on-your-express-application" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Linking @libstack/router on your express application</h2>
+<p>So, let's pretend we have created a router on <code>./routers/MyRouter.ts</code> and an interceptor on <code>./interceptors/MyInterceptor.ts</code></p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">'express'</span>;
+<span class="hljs-keyword">import</span> controller <span class="hljs-keyword">from</span> <span class="hljs-string">'@libstack/router'</span>;
+
+<span class="hljs-comment">// then you will need to import the routers and interceptors in order to be loaded</span>
+<span class="hljs-comment">// just import the router and interceptors and they'll be attached to the `controller`</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'./routers/MyRouter'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'./interceptors/MyInterceptor'</span>;
+
+<span class="hljs-keyword">const</span> app = express();
+
+app.use(controller.router); <span class="hljs-comment">// use plugin the @libstack/router to your express app</span>
+app.listen(process.env.PORT || <span class="hljs-number">8080</span>);
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/docs/building"><span class="arrow-prev">← </span><span>Building for Production</span></a><a class="docs-next button" href="/docs/docs/modules/libstack-tester"><span>@libstack/tester</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-it-">What is it ?</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="toc-headings"><li><a href="#routers">Routers</a></li><li><a href="#interceptors">Interceptors</a></li><li><a href="#errors">Errors</a></li></ul></li><li><a href="#linking-libstackrouter-on-your-express-application">Linking @libstack/router on your express application</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/docs/" class="nav-home"><img src="/docs/img/libstack-white.svg" alt="Libstack" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/docs/libstack.html">Understanding Libstack</a><a href="/docs/docs/getting-started.html">Getting Started</a></div><div><h5>Community</h5><a href="https://twitter.com/sergiofilhow" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="https://github.com/sergiofilhowz/libstack">GitHub</a><a class="github-button" href="https://github.com/sergiofilhowz/libstack" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/docs/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Sérgio Marcelino</section></footer></div></body></html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://libstack.github.io/docs/blog</id>
+    <title>Libstack Blog</title>
+    <updated>2019-11-28T06:00:00Z</updated>
+    <generator>Feed for Node.js</generator>
+    <link rel="alternate" href="https://libstack.github.io/docs/blog"/>
+    <subtitle>The best place to stay up-to-date with the latest Libstack news and events.</subtitle>
+    <logo>https://libstack.github.io/docs/img/libstack.svg</logo>
+    <rights>Copyright © 2019 Sérgio Marcelino</rights>
+    <entry>
+        <title type="html"><![CDATA[New Version 1.0.0]]></title>
+        <id>https://libstack.github.io/docs/blog/2019/11/28/new-version-1.0.0.html</id>
+        <link href="https://libstack.github.io/docs/blog/2019/11/28/new-version-1.0.0.html">
+        </link>
+        <updated>2019-11-28T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>First version release!</p> ]]></summary>
+        <author>
+            <name>Sérgio Marcelino</name>
+            <uri>http://twitter.com/sergiofilhow</uri>
+        </author>
+    </entry>
+</feed>
