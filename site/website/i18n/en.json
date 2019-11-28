@@ -21,6 +21,10 @@
         "title": "@libstack/data",
         "sidebar_label": "@libstack/data"
       },
+      "modules/libstack-keycloak": {
+        "title": "@libstack/keycloak",
+        "sidebar_label": "@libstack/keycloak"
+      },
       "modules/libstack-router": {
         "title": "@libstack/router",
         "sidebar_label": "@libstack/router"

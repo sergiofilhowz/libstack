@@ -9,7 +9,8 @@
       "modules/libstack-router",
       "modules/libstack-tester",
       "modules/libstack-sequel",
-      "modules/libstack-data"
+      "modules/libstack-data",
+      "modules/libstack-keycloak"
     ]
   },
   "docs-other": {
