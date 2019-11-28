@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@libstack/data@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@libstack/data/-/data-1.0.0-rc.1.tgz#049cd2a9f2abc07cdab582a6eacf57a4245d0878"
-  integrity sha512-wDbGg9TXem6srvgt+giJQrOt6hOjaeIJmoPSEOmeWjbiNoRj/CrDjMAhYByjzyotOajPvJu1SVsfWsJZqZeyGw==
+"@libstack/data@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@libstack/data/-/data-1.0.0.tgz#940ea8c466d14c14d3ab31d49e87b27e5a43c7cc"
+  integrity sha512-xiF2vnvDfYhsMlsOw2SHQPQ5QBDaelu7+UD2wpXfTotYV5PohKXyl3+pgADUJyNHcA8iD2/o3oTOLfLCt3g3zA==
   dependencies:
     reflect-metadata "^0.1.13"
     sequelize "5.15.1"
@@ -13,37 +13,37 @@
     squel "^5.13.0"
     uuid "^3.3.3"
 
-"@libstack/router@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@libstack/router/-/router-1.0.0-rc.1.tgz#bf41888097425c4fa4028baf7ac72dd04f6dfcef"
-  integrity sha512-dyxOwhdHbJI2jD9dCTHNkWf3UD45tjNl397xkewc+3WxXi9mN5QT5d1k20sqphNmR9eeqWCAq0k4xlc8bl1R6w==
+"@libstack/router@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@libstack/router/-/router-1.0.0.tgz#56313a00b520b7cfe5e71fe293e7a633c0425ff0"
+  integrity sha512-sSri0aSML5dsSLb8HyCRIZTjaZXMlcYRvb9+eLRynFjyl2giBigEreufpobftthJoBSHQYKQTd+Jl7IWyvH4JQ==
   dependencies:
     express "^4.17.1"
 
-"@libstack/sequel@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@libstack/sequel/-/sequel-1.0.0-rc.1.tgz#6a61367c24d5091d152d2a2fc00e0bd8021a3389"
-  integrity sha512-zLW8qerVnaJJibi/gfQjEBUeEBoWNoSP49QeJqyV2PHa+rviRI5LfQ+99H4MtqavFFWbA7SrgWDfTNW3WCnGsg==
+"@libstack/sequel@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@libstack/sequel/-/sequel-1.0.0.tgz#c8d6156a12982b6bee5f71190b4c21b9f59c8883"
+  integrity sha512-74eBKwGM3gxMPFnXdYUqYtTfOMGNJ3f0VjHPmoatLSLkaHYXaOV9PLuj8fUJIV2v5VZzlUdWndY5+Tf1M+AGYw==
   dependencies:
     reflect-metadata "^0.1.13"
     sequelize "5.15.1"
     sequelize-typescript "^1.0.0"
 
-"@libstack/server@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@libstack/server/-/server-1.0.0-rc.1.tgz#e63ed24c2b8de0fd5aed148c0f108a5daa97f0f3"
-  integrity sha512-Q1Ex4XrFP1VdUPmuOe9NodIO0NiGDXaoeiGaCn+m+f6Sf0Faw1JoG9+1Mb3n2s4S1iuPsCkprOE/yEwT1BvQVg==
+"@libstack/server@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@libstack/server/-/server-1.0.0.tgz#ce1b8ecfb5667800047504e33757ee989291b2ca"
+  integrity sha512-V8x5qAVTpQSRPEXtVVWGDy+myWMxsa+8lT+B+wXr07X4H5sPFHRzjq0ZJTCG27nbEgTJ8h1klkFWZwMmHAfF+A==
   dependencies:
-    "@libstack/router" "^1.0.0-rc.1"
+    "@libstack/router" "^1.0.0"
     body-parser "^1.19.0"
     config "^3.2.3"
     cors "^2.8.5"
     express "^4.17.1"
 
-"@libstack/tester@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@libstack/tester/-/tester-1.0.0-rc.1.tgz#ba714224a3a54e94577bbb17f916c62a2228a8c7"
-  integrity sha512-4mU/2jj6XgT+i9CWOzjdlzbFyFUkBc8STjtD2ZRMj4ZbF/uRH4+xGQpUmnPoE5awHGpX34ptXzhJEIB0T5Lh9g==
+"@libstack/tester@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@libstack/tester/-/tester-1.0.0.tgz#42d5c7a5353f61cef91108f4f9699fb340895358"
+  integrity sha512-SofWAblYZd9rdNHcSGIx1oIwKxyryxHrmtmBCXmCXLTpbqj9KgUrw+aNsChYDnrnvQd9GRyqj+T5/qUrPlMDHw==
   dependencies:
     "@types/chai" "^4.2.3"
     "@types/lodash" "^4.14.144"
