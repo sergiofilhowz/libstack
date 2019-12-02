@@ -97,7 +97,7 @@ class Index extends React.Component {
         style={{textAlign: 'center'}}>
         <h2>What is Libstack?</h2>
         <MarkdownBlock>
-          Libstack is a multi module project that aims to help building NodeJS servers with
+          Libstack is a multi module project that aims to help building NodeJS servers in TypeScript with
           the highest productivity and quality possible. And yet this is not a framework, you can use just the
           modules you like.
         </MarkdownBlock>
@@ -158,7 +158,7 @@ class Index extends React.Component {
             title: 'Complete',
           },
           {
-            content: 'You don\t need to stick with everything Libstack has to offer, instead, you can pick just a few modules to build your application.',
+            content: 'You don\'t need to stick with everything Libstack has to offer, instead, you can pick just a few modules to build your application.',
             image: `${baseUrl}img/undraw_operating_system.svg`,
             imageAlign: 'left',
             title: 'Modular',
@@ -212,5 +212,9 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.description =
+  'Libstack is a multi module project that aims to help building NodeJS servers in TypeScript with ' +
+  'the highest productivity and quality possible.';
 
 module.exports = Index;

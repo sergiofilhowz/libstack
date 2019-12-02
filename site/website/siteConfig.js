@@ -32,6 +32,7 @@ const siteConfig = {
   organizationName: 'libstack-project',
 
   // algolia: {
+  //   appId: 'A07TWX0DG4',
   //   apiKey: '408e924977df0c0218fb32733e3fac85',
   //   indexName: 'github',
   // },

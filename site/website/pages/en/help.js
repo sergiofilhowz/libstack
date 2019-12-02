@@ -34,6 +34,10 @@ function Help(props) {
       content: "Find out what's new with this project",
       title: 'Stay up to date',
     },
+    {
+      content: 'Please create an Issue on Github',
+      title: 'Found a Bug?',
+    },
   ];
 
   return (
@@ -45,7 +49,7 @@ function Help(props) {
           </header>
           <p>This project is maintained by Sérgio Marcelino.</p>
           <p>
-            Please send me an email anytime <a href="mailto:sergiofilhow@gmail.com">sergiofilhow@gmail.com</a>
+            Feel free to send me an email anytime <a href="mailto:sergiofilhow@gmail.com">sergiofilhow@gmail.com</a>
           </p>
           <GridBlock contents={supportLinks} layout="threeColumn" />
         </div>
