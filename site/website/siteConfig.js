@@ -21,10 +21,11 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Libstack', // Title for your website.
+  title: 'Libstack',
   tagline: 'Because you don\'t need a framework',
-  url: 'https://libstack.github.io', // Your website URL
-  baseUrl: '/docs/', // Base URL for your project */
+  url: 'https://libstack.io',
+  cname: 'libstack.io',
+  baseUrl: '/',
 
   gaTrackingId: 'UA-153496698-1',
 
@@ -93,8 +94,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: 'img/libstack.png',
-  twitterImage: 'img/libstack.png',
+  ogImage: 'img/libstack-header.jpg',
+  twitterImage: 'img/libstack-header.jpg',
 
   // For sites with a sizable amount of content, set collapsible to true.
   // Expand/collapse the links and subcategories under categories.
