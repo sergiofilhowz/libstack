@@ -11,15 +11,8 @@ interface PersonRequest {
 
 class PersonService {
 
-  async create(request:PersonRequest):Promise<PersonResponse> {
-    const id = uuidv4();
-    const model = Person.build({ id });
-    model.first_name = request.first_name;
-    model.last_name = request.last_name;
-    model.age = request.age;
-    await model.save();
-
-    return this.get(id);
+  async create(person:PersonRequest):Promise<PersonResponse> {
+    return await Person.create(person).then(({id}) => this.get(id));
   }
 
   async deletePerson(id:string):Promise<void> {
