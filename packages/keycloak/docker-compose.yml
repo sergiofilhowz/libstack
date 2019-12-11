@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  database:
+    hostname: database.local
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  keycloak:
+    hostname: keycloak.local
+    image: jboss/keycloak:8.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: qwe123
+      DB_PORT: 5432
+      DB_VENDOR: postgres
+      DB_ADDR: database.local
+      DB_DATABASE: keycloak
+      DB_PASSWORD: postgres
+      DB_USER: postgres
+      PROXY_ADDRESS_FORWARDING: "true"
+    links:
+      - database:database.local

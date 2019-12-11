@@ -1,3 +1,4 @@
+import { config } from '@libstack/server';
 import TestHelper from './TestHelper';
 import nock from 'nock';
 
@@ -9,23 +10,27 @@ interface KeycloakMockConfig {
   roles?: string [];
   returnCode?: number;
 }
-const mockKeycloakAuthorization = (config: KeycloakMockConfig) => {
+const mockKeycloakAuthorization = (mockConfig: KeycloakMockConfig) => {
   nock.cleanAll();
-  const mock = nock('https://auth.service.org');
-  const response: any = config.valid ? {
+  const mock = nock(config.get('KEYCLOAK_AUTH_URL'));
+  const realm: string = config.get('KEYCLOAK_REALM');
+  const clientId: string = config.get('KEYCLOAK_CLIENT_ID');
+  const response: any = mockConfig.valid ? {
       active: true,
       resource_access: {
-        keycloak_test: {
-          roles: config.roles
+        [clientId]: {
+          roles: mockConfig.roles
         }
       }
     } : { active: false };
 
-  const introspect: string = '/realms/keycloak-test/protocol/openid-connect/token/introspect';
-  mock.post(introspect).reply(config.returnCode ?? 200, response);
+  const introspect: string = `/realms/${realm}/protocol/openid-connect/token/introspect`;
+  mock.post(introspect).reply(mockConfig.returnCode ?? 200, response);
 };
 
 describe('Keycloak Interceptor', () => {
+
+  after(() => nock.cleanAll());
 
   it('should return 200 on unauthorized route', async () => {
     const response = await get('/v1/test/unauthorized');
@@ -34,6 +39,7 @@ describe('Keycloak Interceptor', () => {
   });
 
   it('should return 401 on authorized route', async () => {
+    mockKeycloakAuthorization({ valid: false });
     const response = await get('/v1/test/authorized');
     expect(response.status).to.be.equal(401);
     expect(response.body).to.have.property('message').equal('Not Authorized');

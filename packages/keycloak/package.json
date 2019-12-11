@@ -1,6 +1,6 @@
 {
   "name": "@libstack/keycloak",
-  "version": "1.0.0",
+  "version": "1.1.0-dev.1",
   "description": "Libstack Server - Keycloak Integration",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,6 +21,7 @@
     "server",
     "keycloak"
   ],
+  "homepage": "https://libstack.io",
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "peerDependencies": {
@@ -29,12 +30,15 @@
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "query-string": "6.8.3"
   },
   "devDependencies": {
+    "@types/chai-as-promised": "^7.1.2",
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.140",
     "@types/node": "^12.11.1",
+    "chai-as-promised": "^7.1.1",
     "nock": "^11.7.0"
   }
 }
