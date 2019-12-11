@@ -36,8 +36,8 @@ export class KeycloakClient {
   private readonly clientSecret: string;
   private readonly basicAuth: string;
   private readonly validateUrl: string;
-  private readonly tokenUrl: string;
 
+  readonly tokenUrl: string;
   readonly realm: string;
   readonly server: AxiosInstance;
 
@@ -54,6 +54,29 @@ export class KeycloakClient {
     this.tokenUrl = `/realms/${this.realm}/protocol/openid-connect/token`;
     this.server = axios.create({ baseURL: this.keycloakAuthUrl });
     this.server.interceptors.response.use(null, err => this.interceptAxiosError(err));
+  }
+
+  /**
+   * Performs a login with the given username and password by using the public client ID
+   * @param username         The username from the user to perform the login
+   * @param password         The password from the user to perform the login
+   * @param publicClientId   The public client to use for the login
+   */
+  async performLogin(username: string, password: string, publicClientId: string): Promise<string> {
+    const body = querystring.stringify({
+      grant_type: 'password',
+      username,
+      password
+    });
+    const auth = Buffer.from(`${publicClientId}:`).toString('base64');
+    const { data } = await this.server.post(this.tokenUrl, body, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${auth}`
+      }
+    });
+    return data.access_token;
   }
 
   /**

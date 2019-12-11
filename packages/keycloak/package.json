@@ -1,6 +1,6 @@
 {
   "name": "@libstack/keycloak",
-  "version": "1.1.0-dev.1",
+  "version": "1.1.0-dev.2",
   "description": "Libstack Server - Keycloak Integration",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
