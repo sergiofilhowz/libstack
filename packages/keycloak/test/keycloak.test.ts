@@ -12,7 +12,7 @@ interface KeycloakMockConfig {
 }
 const mockKeycloakAuthorization = (mockConfig: KeycloakMockConfig) => {
   nock.cleanAll();
-  const mock = nock(config.get('KEYCLOAK_AUTH_URL'));
+  const mock = nock(config.get('KEYCLOAK_AUTH_URL')).persist();
   const realm: string = config.get('KEYCLOAK_REALM');
   const clientId: string = config.get('KEYCLOAK_CLIENT_ID');
   const response: any = mockConfig.valid ? {
