@@ -1,3 +1,5 @@
+CREATE DATABASE keycloak;
+
 \c keycloak
 
 --

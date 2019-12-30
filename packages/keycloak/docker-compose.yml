@@ -9,7 +9,7 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      POSTGRES_DB: keycloak
+      POSTGRES_DB: libstack
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 

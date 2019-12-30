@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist/ && tsc --build tsconfig.build.json",
-    "test": "NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts --exit"
+    "test": "NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts --exit --timeout 15000"
   },
   "repository": {
     "type": "git",

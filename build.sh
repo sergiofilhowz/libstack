@@ -1,17 +1,30 @@
+EXIT_STATUS=0
+
+echo "Building Workspace"
+yarn install || EXIT_STATUS=$?
+
+echo "Building @libstack/data"
 cd packages/data
-yarn build
+yarn build || EXIT_STATUS=$?
 
+echo "Building @libstack/keycloak"
 cd ../keycloak
-yarn build
+yarn build || EXIT_STATUS=$?
 
+echo "Building @libstack/router"
 cd ../router
-yarn build
+yarn build || EXIT_STATUS=$?
 
+echo "Building @libstack/sequel"
 cd ../sequel
-yarn build
+yarn build || EXIT_STATUS=$?
 
+echo "Building @libstack/server"
 cd ../server
-yarn build
+yarn build || EXIT_STATUS=$?
 
+echo "Building @libstack/tester"
 cd ../tester
-yarn build
+yarn build || EXIT_STATUS=$?
+
+exit $EXIT_STATUS
