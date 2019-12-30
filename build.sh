@@ -3,6 +3,9 @@ EXIT_STATUS=0
 echo "Building Workspace"
 yarn install || EXIT_STATUS=$?
 
+echo "Adding TypeScript compiler globally"
+yarn global add tsc
+
 echo "Building @libstack/data"
 cd packages/data
 yarn build || EXIT_STATUS=$?
