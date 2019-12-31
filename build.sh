@@ -1,5 +1,7 @@
 EXIT_STATUS=0
 
+chmod 777 /home/node/app
+
 echo "Building Workspace"
 yarn install || EXIT_STATUS=$?
 
