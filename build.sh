@@ -4,7 +4,7 @@ echo "Building Workspace"
 yarn install || EXIT_STATUS=$?
 
 echo "Adding TypeScript compiler globally"
-yarn global add tsc
+yarn global add typescript
 
 echo "Building @libstack/data"
 cd packages/data
