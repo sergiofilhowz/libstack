@@ -1,13 +1,11 @@
-name: test-integration
-on: [pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Permissions
-        run: sudo chmod -R 666 ./
-      - name: Test
-        run: docker-compose up --exit-code-from web
+#name: test-integration
+#on: [pull_request]
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 8
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@master
+#      - name: Test
+#        run: docker-compose up --exit-code-from web
