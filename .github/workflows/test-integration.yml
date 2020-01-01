@@ -9,7 +9,5 @@ jobs:
         uses: actions/checkout@master
       - name: Permissions
         run: sudo chmod -R 666 ./
-      - name: Permissions
-        run: sudo chown -R node ./
       - name: Test
         run: docker-compose up --exit-code-from web
