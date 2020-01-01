@@ -1,8 +1,8 @@
 name: publish module keycloak
 on:
-  create:
-    tags:
-      - keycloak-v*
+  push:
+    branches:
+      - refs/tags/keycloak-v*
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,9 +16,7 @@ jobs:
           node-version: 10.x
       - name: Install and Build
         run: sh build.sh
-      - name: Move to Keycloak Folder
-        run: cd packages/keycloak
       - name: Publish Keycloak
-        run: npm publish --access public
+        run: cd packages/keycloak && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
