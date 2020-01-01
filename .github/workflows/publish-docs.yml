@@ -14,14 +14,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - run: mkdir ~/.ssh
-      - run: echo "${{ secrets.SSH_SECRET }}" > ~/.ssh/id_rsa
       - name: Publish
         env:
           GIT_USER: sergiofilhowz
           CURRENT_BRANCH: master
           USE_SSH: true
         run: |
+          mkdir ~/.ssh
+          sudo chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_SECRET }}" > ~/.ssh/id_rsa
           cd ./site/website
           yarn
           yarn run publish-gh-pages
