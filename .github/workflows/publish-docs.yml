@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
+      - run: echo "${{ secrets.SSH_SECRET }}" > ~/.ssh/id_rsa
       - name: Publish
         env:
           GIT_USER: sergiofilhowz
