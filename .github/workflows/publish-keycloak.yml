@@ -13,10 +13,14 @@ jobs:
       - name: Use Node.js v10
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
-          registry-url: https://registry.npmjs.org/
+          node-version: '10.x'
+          registry-url: 'https://registry.npmjs.org'
       - name: Install and Build
         run: sh build.sh
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ~/.npmrc
-      - name: Publish Keycloak
-        run: cd packages/keycloak && npm publish --access public
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          cd packages/keycloak
+          npm publish --access public
