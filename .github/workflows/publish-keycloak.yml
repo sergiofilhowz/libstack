@@ -1,5 +1,8 @@
-name: integrated tests
-on: [pull_request]
+name: publish module keycloak
+on:
+  create:
+    tags:
+      - keycloak-v*
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +16,9 @@ jobs:
           node-version: 10.x
       - name: Install and Build
         run: sh build.sh
-      - name: Permissions
-        run: chmod -R 777 ./
-      - name: Test
-        run: docker-compose up --exit-code-from web
+      - name: Move to Keycloak Folder
+        run: cd packages/keycloak
+      - name: Publish Keycloak
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

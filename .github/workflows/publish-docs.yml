@@ -1,8 +1,8 @@
-name: publish-docs
+name: publish docs
 on:
-  push:
-    branches:
-      - master
+  create:
+    tags:
+      - docs-v*
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,11 +10,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Use Node.js v10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
       - name: Publish
         env:
           GIT_USER: sergiofilhowz
           CURRENT_BRANCH: master
-          USE_SSL: true
+          USE_SSH: true
         run: |
           cd ./site/website
           yarn
