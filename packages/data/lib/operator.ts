@@ -51,7 +51,7 @@ export const IN: Operator = (expression: Expression, property: string, values: a
   if (values && values.length) {
     expression(property + ' IN ?', values);
   } else {
-    expression('0');
+    expression('0 = 1');
   }
 };
 
@@ -59,7 +59,7 @@ export const NOT_IN: Operator = (expression: Expression, property: string, value
   if (values && values.length > 0) {
     expression(property + ' NOT IN ?', values);
   } else {
-    expression('1');
+    expression('1 = 1');
   }
 };
 

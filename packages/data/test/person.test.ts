@@ -234,8 +234,29 @@ describe('Model', () => {
         }
       });
       expect(result).with.length(1);
-      expect(result[0]).to.have.property('first_name').equal(anotherPerson.first_name);
+      expect(result[0]).to.have.property('firstName').equal(anotherPerson.firstName);
     });
-  })
+
+    it('should filter with criteria IN with and without values', async () => {
+      let result = await PersonModel.list({
+        projection: PersonResponse,
+        criteria: {
+          reference: PersonCriteria,
+          query: { ageIn: [15, 19] }
+        }
+      });
+      expect(result).with.length(1);
+      expect(result[0]).to.have.property('age').equal(anotherPerson.age);
+
+      result = await PersonModel.list({
+        projection: PersonResponse,
+        criteria: {
+          reference: PersonCriteria,
+          query: { ageIn: [] }
+        }
+      });
+      expect(result).with.length(0);
+    });
+  });
 
 });
