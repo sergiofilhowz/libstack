@@ -78,4 +78,4 @@ services:
     links:
       - test_keycloak:keycloak.local
       - test_database:database.local
-    command: bash -c "sh build.sh && sh test.sh"
+    command: bash -c "sh test.sh"

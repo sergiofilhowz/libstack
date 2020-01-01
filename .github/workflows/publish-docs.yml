@@ -1,21 +1,21 @@
-#name: publish-docs
-#on:
-#  push:
-#    branches:
-#      - master
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 3
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@master
-#      - name: Publish
-#        env:
-#          GIT_USER: sergiofilhowz
-#          CURRENT_BRANCH: master
-#          USE_SSL: true
-#        run: |
-#          cd ./site/website
-#          yarn
-#          yarn run publish-gh-pages
+name: publish-docs
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Publish
+        env:
+          GIT_USER: sergiofilhowz
+          CURRENT_BRANCH: master
+          USE_SSL: true
+        run: |
+          cd ./site/website
+          yarn
+          yarn run publish-gh-pages
