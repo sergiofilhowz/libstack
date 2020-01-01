@@ -1,6 +1,6 @@
 name: publish module keycloak
 on:
-  create:
+  push:
     tags:
       - keycloak-v*
 jobs:

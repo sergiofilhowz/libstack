@@ -1,6 +1,6 @@
 name: publish docs
 on:
-  create:
+  push:
     tags:
       - docs-v*
 jobs:
@@ -23,6 +23,7 @@ jobs:
           mkdir ~/.ssh
           sudo chmod 700 ~/.ssh
           echo "${{ secrets.SSH_SECRET }}" > ~/.ssh/id_rsa
+          sudo chmod 700 ~/.ssh/id_rsa
           cd ./site/website
           yarn
           yarn run publish-gh-pages
