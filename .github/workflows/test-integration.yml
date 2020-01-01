@@ -8,8 +8,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Permissions
-        run: chmod -R 666 .
+        run: sudo chmod -R 666 ./
       - name: Permissions
-        run: chown -R node .
+        run: sudo chown -R node ./
       - name: Test
         run: docker-compose up --exit-code-from web
