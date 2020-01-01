@@ -1,7 +1,7 @@
 import { DataModel, Property, Projection, Criteria, Operators } from '../..';
 import { Person } from '../sequelize/Person';
 
-const { EQUAL, GREATER_THAN, ILIKE, LESS_THAN } = Operators;
+const { EQUAL, GREATER_THAN, ILIKE, LESS_THAN, IN } = Operators;
 
 @Projection
 export class CityResponse {
@@ -26,8 +26,8 @@ export class TagResponse {
 @Projection({ sorted: true })
 export class PersonResponse {
   @Property uuid: string;
-  @Property first_name: string;
-  @Property last_name: string;
+  @Property firstName: string;
+  @Property lastName: string;
   @Property age: number;
   @Property address: AddressResponse;
 
@@ -35,20 +35,28 @@ export class PersonResponse {
   adult: boolean;
 }
 
+@Projection({ sorted: true })
+export class PersonCityResponse {
+  @Property uuid: string;
+
+  @Property({ property: 'address.city.name' })
+  city: string;
+}
+
 @Projection
 export class PersonAddressResponse {
   @Property({ property: 'address.uuid' })
-  address_uuid: string;
+  addressUuid: string;
 
   @Property({ property: 'address.street' })
-  address_street: string;
+  addressStreet: string;
 
   @Property({ property: 'address.number' })
-  address_number: string;
+  addressNumber: string;
 }
 
 export class PersonCriteria {
-  @Criteria({ property: 'first_name', operator: ILIKE })
+  @Criteria({ property: 'firstName', operator: ILIKE })
   firstName?: string;
 
   @Criteria({ property: 'address.city.name', operator: ILIKE })
@@ -58,10 +66,13 @@ export class PersonCriteria {
   age?: number;
 
   @Criteria({ operator: GREATER_THAN, property: 'age', value: 18 })
-  adults_only?:boolean;
+  adultsOnly?:boolean;
 
   @Criteria({ operator: LESS_THAN, property: 'age', value: 18 })
-  kids_only?:boolean;
+  kidsOnly?:boolean;
+
+  @Criteria({ operator: IN, property: 'age' })
+  ageIn?: number[]
 }
 
 export class PersonSingleCriteria {

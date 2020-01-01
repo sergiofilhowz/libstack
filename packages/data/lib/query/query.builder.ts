@@ -18,7 +18,7 @@ type FieldDefinition = {
   type: DataType;
   transform?: Transformer;
   alias: string;
-  field: string;
+  column: string;
 };
 
 export class QueryBuilder<T> {
@@ -58,7 +58,7 @@ export class QueryBuilder<T> {
     }
 
     const field: FieldDefinition = this.fields[sortField];
-    this.query.order(`${field.alias}.${field.field}`, sortAscending);
+    this.query.order(`${field.alias}.${field.column}`, sortAscending);
   }
 
   criteria(criteriaRequest: CriteriaRequest<any>) {
@@ -88,31 +88,16 @@ export class QueryBuilder<T> {
           }
         }
 
-        if (modelProperty.indexOf('.') > 0) {
-          const modelAssociation = this.getAssociation(this.mainAlias, modelProperty, this.model);
-          const split = modelProperty.split('.');
-          const lastProperty = split[split.length - 1];
-
-          if (!modelAssociation.model.rawAttributes.hasOwnProperty(lastProperty)) {
-            throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
-          }
-          const field = `${modelAssociation.alias}.${lastProperty}`;
-          fieldConfig.options.operator(expression.and.bind(expression), field, value, this);
-        } else if (this.model.rawAttributes.hasOwnProperty(modelProperty)) {
-          const field = `${this.mainAlias}.${modelProperty}`;
-          fieldConfig.options.operator(expression.and.bind(expression), field, value, this);
-        } else if (this.model.associations.hasOwnProperty(modelProperty)) {
-          throw new Error(`Entire association is not allowed to be on Criteria. ${this.projection.name}.${modelProperty}`);
-        } else {
-          throw new Error(`Property ${modelProperty} not found on Model ${this.model.name}`);
-        }
+        const field: FieldDefinition = this.getField(modelProperty);
+        const property: string = `${field.alias}.${field.column}`;
+        fieldConfig.options.operator(expression.and.bind(expression), property, value, this);
       }
     });
 
     this.query.where(expression);
   }
 
-  private createAlias(name: string) {
+  private createAlias(name: string): string {
     this.aliasCount += 1;
     return `${name.toLowerCase()}_${this.aliasCount}`;
   }
@@ -128,7 +113,7 @@ export class QueryBuilder<T> {
     } else if (model.associations.hasOwnProperty(property)) {
       const association: Association = model.associations[property];
       if (!this.associations[property]) {
-        const associationAlias = this.createAlias(property);
+        const associationAlias: string = this.createAlias(property);
         this.associations[property] = {
           alias: associationAlias,
           modelProperty: property,
@@ -148,14 +133,16 @@ export class QueryBuilder<T> {
     }
   }
 
-  private getAssociation(alias: string, modelProperty: string, model: ModelCtor<any>, options?: PropertyOptions) {
+  private getAssociation(alias: string, modelProperty: string,
+                         model: ModelCtor<any>, options?: PropertyOptions): ModelAssociation {
     if (modelProperty.indexOf('.') > 0) {
-      const associations = modelProperty.split('.');
+      const associations: string [] = modelProperty.split('.');
       let lastAssociation: ModelAssociation = null;
       for (let i = 0; i < associations.length - 1; i++) {
-        const currentProperty = associations[i];
+        const currentProperty: string = associations[i];
         const currentModel: ModelCtor<any> = lastAssociation && lastAssociation.model || model;
-        lastAssociation = this.getAssociation(alias, currentProperty, currentModel, options);
+        lastAssociation = this.getAssociation(lastAssociation?.alias ?? alias,
+          currentProperty, currentModel, options);
       }
 
       return lastAssociation;
@@ -163,32 +150,69 @@ export class QueryBuilder<T> {
     return this.getAssociationInternal(alias, modelProperty, model, options);
   }
 
+  private getField(modelProperty: string): FieldDefinition {
+    if (modelProperty.indexOf('.') > 0) {
+      const modelAssociation = this.getAssociation(this.mainAlias, modelProperty, this.model);
+      const split = modelProperty.split('.');
+      const lastProperty = split[split.length - 1];
+
+      if (!modelAssociation.model.rawAttributes.hasOwnProperty(lastProperty)) {
+        throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
+      }
+      const field = `${modelAssociation.alias}.${lastProperty}`;
+      const column: string = modelAssociation.model.rawAttributes[lastProperty].field ?? lastProperty;
+      this.query.field(`${modelAssociation.alias}.${column}`, field);
+      this.fields[field] = {
+        column,
+        alias: modelAssociation.alias,
+        type: modelAssociation.model.rawAttributes[lastProperty].type,
+      };
+      return this.fields[field];
+    } else if (this.model.rawAttributes.hasOwnProperty(modelProperty)) {
+      const field = `${this.mainAlias}.${modelProperty}`;
+      const column: string = this.model.rawAttributes[modelProperty].field ?? modelProperty;
+      return this.fields[field] = {
+        column,
+        alias: this.mainAlias,
+        type: this.model.rawAttributes[modelProperty].type,
+      };
+    } else if (this.model.associations.hasOwnProperty(modelProperty)) {
+      throw new Error(`Entire association is not allowed to be on Criteria. ${this.projection.name}.${modelProperty}`);
+    } else {
+      throw new Error(`Property ${modelProperty} not found on Model ${this.model.name}`);
+    }
+  }
+
   private build(alias: string, model: ModelCtor<any>, projection: ProjectionConfiguration, prefix?: string) {
     projection.properties.forEach((property: PropertyConfiguration) => {
       const { modelProperty, projectionProperty, options, propertyType } = property;
 
+
+
       if (modelProperty.indexOf('.') > 0) {
-        const modelAssociation = this.getAssociation(alias, modelProperty, model, options);
-        const split = modelProperty.split('.');
-        const lastProperty = split[split.length - 1];
+        const modelAssociation: ModelAssociation = this.getAssociation(alias, modelProperty, model, options);
+        const split: string [] = modelProperty.split('.');
+        const lastProperty: string = split[split.length - 1];
+        const column: string = modelAssociation.model.rawAttributes[lastProperty].field ?? lastProperty;
 
         if (!modelAssociation.model.rawAttributes.hasOwnProperty(lastProperty)) {
           throw new Error(`Property ${lastProperty} not found on Model ${modelAssociation.model.name}`);
         }
 
-        const field = prefix ? `${prefix}.${modelProperty}` : projectionProperty;
-        this.query.field(`${modelAssociation.alias}.${lastProperty}`, field);
+        const field: string = prefix ? `${prefix}.${modelProperty}` : projectionProperty;
+        this.query.field(`${modelAssociation.alias}.${column}`, field);
         this.fields[field] = {
-          field,
+          column,
           alias: modelAssociation.alias,
           type: modelAssociation.model.rawAttributes[lastProperty].type,
           transform: options && options.transform
         };
       } else if (model.rawAttributes.hasOwnProperty(modelProperty)) {
-        const field = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
-        this.query.field(`${alias}.${modelProperty}`, field);
+        const column: string = model.rawAttributes[modelProperty].field ?? modelProperty;
+        const field: string = prefix ? `${prefix}.${projectionProperty}` : projectionProperty;
+        this.query.field(`${alias}.${column}`, field);
         this.fields[field] = {
-          field,
+          column,
           alias,
           type: model.rawAttributes[modelProperty].type,
           transform: options && options.transform
