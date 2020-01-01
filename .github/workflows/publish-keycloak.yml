@@ -1,8 +1,8 @@
 name: publish module keycloak
 on:
-  push:
-    branches:
-      - refs/tags/keycloak-v*
+  create:
+    tags:
+      - keycloak-v*
 jobs:
   build:
     runs-on: ubuntu-latest
