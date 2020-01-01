@@ -1,0 +1,49 @@
+{
+  "name": "sample-api",
+  "version": "1.0.0",
+  "description": "Sample API",
+  "main": "src/node/server.js",
+  "scripts": {
+    "production": "cross-env NODE_ENV=production node src/node/server.js",
+    "build": "rm -rf dist/ && npx tsc --diagnostics -p tsconfig.json",
+    "test": "cross-env NODE_ENV=test mocha --timeout 15000 --exit -r ts-node/register test/**/*.test.ts",
+    "start": "npm run watch & npm run nodemon",
+    "nodemon": "nodemon dist/src/node/server.js",
+    "watch": "npx tsc --watch"
+  },
+  "keywords": [],
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@libstack/data": "^1.0.1",
+    "@libstack/sequel": "^1.0.0",
+    "@libstack/server": "^1.0.0",
+    "@types/graphql": "^14.5.0",
+    "apollo-server-express": "^2.9.15",
+    "class-validator": "^0.11.0",
+    "cross-env": "^5.1.4",
+    "graphql": "^14.5.8",
+    "lodash": "^4.17.15",
+    "pg": "^7.8.2",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.0",
+    "sequelize-typescript": "^1.0.0",
+    "type-graphql": "^0.17.6",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@libstack/tester": "^1.0.0",
+    "@types/bluebird": "^3.5.28",
+    "@types/express": "^4.17.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.7",
+    "@types/node-fetch": "^2.5.4",
+    "@types/uuid": "^3.4.5",
+    "@types/validator": "^10.11.3",
+    "@types/ws": "^6.0.4",
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.2"
+  }
+}

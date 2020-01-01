@@ -1,0 +1,15 @@
+{
+  "VERBOSE": false,
+  "SYNC": true,
+  "PORT": 8878,
+
+  "DB_DIALECT": "postgres",
+  "DB_HOST": "localhost",
+  "DB_PORT": 5432,
+  "DB_NAME": "test",
+  "DB_USERNAME": "postgres",
+  "DB_PASSWORD": "postgres",
+  "DB_POOL_MAX_CONNECTIONS": 5,
+  "DB_POOL_MAX_IDLE_TIME": 30,
+  "DB_MAX_CONCURRENT_QUERIES": 50
+}
