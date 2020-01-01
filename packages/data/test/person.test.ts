@@ -4,7 +4,7 @@ import database from './database';
 import { Person } from './sequelize/Person';
 import { Address } from './sequelize/Address';
 import PersonModel, {
-  PersonAddressResponse,
+  PersonAddressResponse, PersonCityResponse,
   PersonCriteria,
   PersonResponse,
   PersonSingleCriteria
@@ -90,6 +90,16 @@ describe('Model', () => {
     expect(result[1]).to.have.property('address').to.have.property('number').equal(anotherAddress.number);
     expect(result[1]).to.have.property('address').to.have.property('city').to.have.property('uuid').equal(city.uuid);
     expect(result[1]).to.have.property('address').to.have.property('city').to.have.property('name').equal(city.name);
+  });
+
+  it('should get list of model with subproperties', async () => {
+    const result:PersonCityResponse [] = await PersonModel.list({
+      projection: PersonCityResponse,
+    });
+
+    expect(result).with.length(2);
+    expect(result[0]).to.have.property('city').equal(city.name);
+    expect(result[1]).to.have.property('city').equal(city.name);
   });
 
   it('should get page of people', async () => {
