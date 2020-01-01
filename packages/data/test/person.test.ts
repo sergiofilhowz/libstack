@@ -4,7 +4,7 @@ import database from './database';
 import { Person } from './sequelize/Person';
 import { Address } from './sequelize/Address';
 import PersonModel, {
-  PersonAddressResponse,
+  PersonAddressResponse, PersonCityResponse,
   PersonCriteria,
   PersonResponse,
   PersonSingleCriteria
@@ -36,8 +36,8 @@ describe('Model', () => {
     });
     person = await Person.create({
       uuid: createUuid(),
-      first_name: 'Sergio',
-      last_name: 'Marcelino',
+      firstName: 'Sergio',
+      lastName: 'Marcelino',
       age: 30,
       address_id: address.id
     });
@@ -51,8 +51,8 @@ describe('Model', () => {
     });
     anotherPerson = await Person.create({
       uuid: createUuid(),
-      first_name: 'John',
-      last_name: 'Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       age: 15,
       address_id: anotherAddress.id
     });
@@ -72,8 +72,8 @@ describe('Model', () => {
 
     expect(result).with.length(2);
     expect(result[0]).to.have.property('uuid').equal(person.uuid);
-    expect(result[0]).to.have.property('first_name').equal(person.first_name);
-    expect(result[0]).to.have.property('last_name').equal(person.last_name);
+    expect(result[0]).to.have.property('firstName').equal(person.firstName);
+    expect(result[0]).to.have.property('lastName').equal(person.lastName);
     expect(result[0]).to.have.property('age').equal(person.age);
     expect(result[0]).to.have.property('address').to.have.property('uuid').equal(address.uuid);
     expect(result[0]).to.have.property('address').to.have.property('street').equal(address.street);
@@ -82,14 +82,24 @@ describe('Model', () => {
     expect(result[0]).to.have.property('address').to.have.property('city').to.have.property('name').equal(city.name);
 
     expect(result[1]).to.have.property('uuid').equal(anotherPerson.uuid);
-    expect(result[1]).to.have.property('first_name').equal(anotherPerson.first_name);
-    expect(result[1]).to.have.property('last_name').equal(anotherPerson.last_name);
+    expect(result[1]).to.have.property('firstName').equal(anotherPerson.firstName);
+    expect(result[1]).to.have.property('lastName').equal(anotherPerson.lastName);
     expect(result[1]).to.have.property('age').equal(anotherPerson.age);
     expect(result[1]).to.have.property('address').to.have.property('uuid').equal(anotherAddress.uuid);
     expect(result[1]).to.have.property('address').to.have.property('street').equal(anotherAddress.street);
     expect(result[1]).to.have.property('address').to.have.property('number').equal(anotherAddress.number);
     expect(result[1]).to.have.property('address').to.have.property('city').to.have.property('uuid').equal(city.uuid);
     expect(result[1]).to.have.property('address').to.have.property('city').to.have.property('name').equal(city.name);
+  });
+
+  it('should get list of model with subproperties', async () => {
+    const result:PersonCityResponse [] = await PersonModel.list({
+      projection: PersonCityResponse,
+    });
+
+    expect(result).with.length(2);
+    expect(result[0]).to.have.property('city').equal(city.name);
+    expect(result[1]).to.have.property('city').equal(city.name);
   });
 
   it('should get page of people', async () => {
@@ -118,9 +128,9 @@ describe('Model', () => {
     let result:Array<PersonAddressResponse> = await PersonModel.list({ projection: PersonAddressResponse });
 
     expect(result).with.length(2);
-    expect(result[0]).to.have.property('address_uuid').equal(address.uuid);
-    expect(result[0]).to.have.property('address_street').equal(address.street);
-    expect(result[0]).to.have.property('address_number').equal(address.number);
+    expect(result[0]).to.have.property('addressUuid').equal(address.uuid);
+    expect(result[0]).to.have.property('addressStreet').equal(address.street);
+    expect(result[0]).to.have.property('addressNumber').equal(address.number);
   });
 
   it('should get a single person', async () => {
@@ -134,8 +144,8 @@ describe('Model', () => {
 
     expect(result).to.not.be.null;
     expect(result).to.have.property('uuid').equal(person.uuid);
-    expect(result).to.have.property('first_name').equal(person.first_name);
-    expect(result).to.have.property('last_name').equal(person.last_name);
+    expect(result).to.have.property('firstName').equal(person.firstName);
+    expect(result).to.have.property('lastName').equal(person.lastName);
     expect(result).to.have.property('age').equal(person.age);
 
     const addressExpect = expect(result).to.have.property('address');
@@ -157,19 +167,19 @@ describe('Model', () => {
     it('should sort by property on projection', async () => {
       let result = await PersonModel.list({
         projection: PersonResponse,
-        sort: 'first_name'
+        sort: 'firstName'
       });
       expect(result).with.length(2);
-      expect(result[0]).to.have.property('first_name').equal(anotherPerson.first_name);
-      expect(result[1]).to.have.property('first_name').equal(person.first_name);
+      expect(result[0]).to.have.property('firstName').equal(anotherPerson.firstName);
+      expect(result[1]).to.have.property('firstName').equal(person.firstName);
 
       result = await PersonModel.list({
         projection: PersonResponse,
-        sort: '-first_name'
+        sort: '-firstName'
       });
       expect(result).with.length(2);
-      expect(result[0]).to.have.property('first_name').equal(person.first_name);
-      expect(result[1]).to.have.property('first_name').equal(anotherPerson.first_name);
+      expect(result[0]).to.have.property('firstName').equal(person.firstName);
+      expect(result[1]).to.have.property('firstName').equal(anotherPerson.firstName);
     });
 
   });
@@ -220,22 +230,43 @@ describe('Model', () => {
         projection: PersonResponse,
         criteria: {
           reference: PersonCriteria,
-          query: { adults_only: true }
+          query: { adultsOnly: true }
         }
       });
       expect(result).with.length(1);
-      expect(result[0]).to.have.property('first_name').equal(person.first_name);
+      expect(result[0]).to.have.property('firstName').equal(person.firstName);
 
       result = await PersonModel.list({
         projection: PersonResponse,
         criteria: {
           reference: PersonCriteria,
-          query: { kids_only: true }
+          query: { kidsOnly: true }
         }
       });
       expect(result).with.length(1);
-      expect(result[0]).to.have.property('first_name').equal(anotherPerson.first_name);
+      expect(result[0]).to.have.property('firstName').equal(anotherPerson.firstName);
     });
-  })
+
+    it('should filter with criteria IN with and without values', async () => {
+      let result = await PersonModel.list({
+        projection: PersonResponse,
+        criteria: {
+          reference: PersonCriteria,
+          query: { ageIn: [15, 19] }
+        }
+      });
+      expect(result).with.length(1);
+      expect(result[0]).to.have.property('age').equal(anotherPerson.age);
+
+      result = await PersonModel.list({
+        projection: PersonResponse,
+        criteria: {
+          reference: PersonCriteria,
+          query: { ageIn: [] }
+        }
+      });
+      expect(result).with.length(0);
+    });
+  });
 
 });

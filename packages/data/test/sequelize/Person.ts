@@ -26,12 +26,12 @@ export class Person extends Model<Person> {
   uuid: string;
 
   @Length({ min: 3, max: 32 })
-  @Column
-  first_name: string;
+  @Column({ field: 'first_name' })
+  firstName: string;
 
   @Length({ min: 3, max: 32 })
-  @Column
-  last_name: string;
+  @Column({ field: 'last_name' })
+  lastName: string;
 
   @Column
   age: number;

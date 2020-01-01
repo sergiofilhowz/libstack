@@ -1,6 +1,6 @@
 {
   "name": "@libstack/data",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sequelize DataModel",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
