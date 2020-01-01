@@ -1,0 +1,25 @@
+name: publish docs
+on:
+  create:
+    tags:
+      - docs-v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Use Node.js v10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Publish
+        env:
+          GIT_USER: sergiofilhowz
+          CURRENT_BRANCH: master
+          USE_SSH: true
+        run: |
+          cd ./site/website
+          yarn
+          yarn run publish-gh-pages

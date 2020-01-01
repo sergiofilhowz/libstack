@@ -2,8 +2,8 @@
   "VERBOSE": false,
   "PORT": 8875,
   "KEYCLOAK_ENABLED": true,
-  "KEYCLOAK_AUTH_URL":  "https://auth.service.org",
-  "KEYCLOAK_CLIENT_ID": "keycloak_test",
-  "KEYCLOAK_CLIENT_SECRET":  "a1881f13-3f71-4771-9c3d-d3317c4cdaaf",
-  "KEYCLOAK_REALM": "keycloak-test"
+  "KEYCLOAK_AUTH_URL":  "http://localhost:8080/auth",
+  "KEYCLOAK_CLIENT_ID": "libstack",
+  "KEYCLOAK_CLIENT_SECRET": "b71720d8-57d9-4d46-b7ca-7e07ae775539",
+  "KEYCLOAK_REALM": "libstack-test"
 }

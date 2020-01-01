@@ -1,0 +1,81 @@
+#
+# libstack.io
+#
+# Integrated tests Docker compose
+#
+# $ docker-compose up --exit-code-from web
+#
+
+version: "2.1"
+
+volumes:
+  data:
+    driver_opts:
+      type: tmpfs
+      device: ":/docker/example"
+
+services:
+  test_database:
+    hostname: database.local
+    image: postgres:11.5
+    command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off
+    volumes:
+      - ./packages/keycloak/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: libstack_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  test_keycloak:
+    hostname: keycloak.local
+    image: jboss/keycloak:8.0.1
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: qwe123
+      DB_PORT: 5432
+      DB_VENDOR: postgres
+      DB_ADDR: database.local
+      DB_DATABASE: keycloak
+      DB_PASSWORD: postgres
+      DB_USER: postgres
+      PROXY_ADDRESS_FORWARDING: "true"
+    links:
+      - test_database:database.local
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/realms/master"]
+      interval: 1m
+      timeout: 5s
+      retries: 10
+    depends_on:
+      test_database:
+        condition: service_healthy
+
+  web:
+    image: node:lts
+    user: node
+    working_dir: /home/node/app
+    environment:
+      NODE_ENV: test
+      DB_HOST: database.local
+      DB_PORT: 5432
+      DB_NAME: libstack_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      KEYCLOAK_AUTH_URL: http://keycloak.local:8080/auth
+    volumes:
+      - ./:/home/node/app
+    depends_on:
+      test_database:
+        condition: service_healthy
+      test_keycloak:
+        condition: service_healthy
+    links:
+      - test_keycloak:keycloak.local
+      - test_database:database.local
+    command: bash -c "sh test.sh"

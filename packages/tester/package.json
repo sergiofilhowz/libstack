@@ -16,6 +16,11 @@
     "typescript",
     "server"
   ],
+  "homepage": "https://libstack.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergiofilhowz/libstack.git"
+  },
   "license": "MIT",
   "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
   "peerDependencies": {

@@ -1,0 +1,19 @@
+name: integrated tests
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Use Node.js v10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Install and Build
+        run: sh build.sh
+      - name: Permissions
+        run: chmod -R 777 ./
+      - name: Test
+        run: docker-compose up --exit-code-from web
