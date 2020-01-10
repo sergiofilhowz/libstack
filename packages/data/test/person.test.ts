@@ -32,7 +32,7 @@ describe('Model', () => {
       uuid: createUuid(),
       street: '5th Street',
       number: 108,
-      city_id: city.id,
+      cityId: city.id,
     });
     person = await Person.create({
       uuid: createUuid(),
@@ -47,7 +47,7 @@ describe('Model', () => {
       uuid: createUuid(),
       street: '3rd Avenue',
       number: 854,
-      city_id: city.id
+      cityId: city.id
     });
     anotherPerson = await Person.create({
       uuid: createUuid(),

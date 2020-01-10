@@ -33,8 +33,8 @@ export class Address extends Model<Address> {
   number: number;
 
   @ForeignKey(() => City)
-  @Column
-  city_id: number;
+  @Column({ field: 'city_id' })
+  cityId: number;
 
   @BelongsTo(() => City)
   city:City;
