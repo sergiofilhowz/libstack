@@ -120,7 +120,8 @@ export class QueryBuilder<T> {
           model: association.target,
           association
         };
-        const condition = `${alias}.${association.foreignKey} = ${associationAlias}.${association.target.primaryKeyAttribute}`;
+        // @ts-ignore unfortunately on the type there is no identifierField but we need to use it
+        const condition = `${alias}.${association.identifierField} = ${associationAlias}.${association.target.primaryKeyAttribute}`;
         if (options && options.joinType === 'right') {
           this.query.join(association.target.tableName, associationAlias, condition);
         } else {
