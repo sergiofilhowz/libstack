@@ -103,7 +103,8 @@ export const database = new Database({
 
   host: config.get('DB_HOST'),
   port: config.getNumber('DB_PORT'),
-
+  
+  logging: config.getBoolean('VERBOSE'),
 
   socketPath: config.get('DB_SOCKET_PATH'),
 
