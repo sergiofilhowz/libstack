@@ -15,3 +15,8 @@
 ### 1.1.0
 [FEATURE] Added an userService to be able to manage keycloak users.
 [FEATURE] Added an groupService to be able to manage keycloak groups.
+
+## @libstack/sequel
+
+### 1.0.1
+[FIX] - Enabling VERBOSE flag to log SQL
