@@ -100,6 +100,26 @@ const server: Server = new Server();
 server.beforeStartup(database.sync);
 ```
 
+### Separate statements
+Some connectors may limit the execution as 1 statement per query call. Which means migration will need to separate statements on migration files.
+
+To do that you will need to enable the statement separation
+
+```typescript
+database.loadMigrations({ 
+  dir: join(__dirname, '..', 'db'),
+
+  /**
+   * IMPORTANT Note: The statement separation is based on the semicolon, which means
+   * that creation of FUNCTION, TRIGGER or STORED PROCEDURE are NOT supported on this mode.
+   */
+  separateStatements: true 
+});
+```
+
+> IMPORTANT Note: The statement separation is based on the semicolon, which means
+     that creation of FUNCTION, TRIGGER or STORED PROCEDURE are NOT supported on this mode.
+
 ### Syncing manually
 You can manually sync database, mostly used on tests
 
@@ -113,6 +133,3 @@ describe('My Test Case', () => {
   before(() => database.sync({ clear: true }));
 });
 ```
-
-
-

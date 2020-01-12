@@ -12,6 +12,18 @@ export interface MigrationOptions {
    * Absolute path to the migration folder
    */
   dir: string;
+
+  /**
+   * When set to true, the migration process will run each statement separately.
+   * This is important if you want to use some connections that doesn't allow
+   * multiple statements.
+   *
+   * Defaults to `false`.
+   *
+   * IMPORTANT Note: The statement separation is based on the semicolon, which means
+   * that creation of FUNCTION, TRIGGER or STORED PROCEDURE are NOT supported on this mode.
+   */
+  separateStatements?: boolean;
 }
 
 export default class SequelizeMigration {
@@ -79,11 +91,22 @@ export default class SequelizeMigration {
           success: false
         });
         const content = readFileSync(path.join(moduleDescriptor.dir, dialectName, script), 'utf8');
-        await this.sequelize.query(content);
+        await this.runQueries(moduleDescriptor, content);
 
         migration.success = true;
         await migration.save({ fields: ['success'] });
       }
+    }
+  }
+
+  private async runQueries(moduleDescriptor: MigrationOptions, queries: string): Promise<void> {
+    if (moduleDescriptor.separateStatements === true) {
+      const statements: string [] = queries.split(';');
+      for (let statement of statements) {
+        await this.sequelize.query(statement);
+      }
+    } else {
+      await this.sequelize.query(queries);
     }
   }
 }
