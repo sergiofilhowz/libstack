@@ -11,18 +11,21 @@ const { sequelize, migration } = database;
 const { Migration } = migration;
 
 database.loadMigrations({
-  dir: join(__dirname, 'module')
+  dir: join(__dirname, 'module'),
+  separateStatements: true
 });
 
 describe('Sequelize Migration', () => {
 
   beforeEach(() => {
     return Promise.all([
-      sequelize.query('drop table if exists table_1_0_0'),
-      sequelize.query('drop table if exists table_1_0_1'),
-      sequelize.query('drop table if exists table_1_1_0'),
-      sequelize.query('drop table if exists table_1_1_1'),
-      sequelize.query('drop table if exists db_migration')
+      sequelize.query('DROP TABLE IF EXISTS table_1_0_0'),
+      sequelize.query('DROP TABLE IF EXISTS table_1_0_1'),
+      sequelize.query('DROP TABLE IF EXISTS table_1_1_0'),
+      sequelize.query('DROP TABLE IF EXISTS table_1_1_1'),
+      sequelize.query('DROP TABLE IF EXISTS table_2_0_0'),
+      sequelize.query('DROP TABLE IF EXISTS table_2_0_1'),
+      sequelize.query('DROP TABLE IF EXISTS db_migration')
     ]);
   });
 
@@ -36,7 +39,7 @@ describe('Sequelize Migration', () => {
       order: [['script_name', 'ASC']]
     });
 
-    expect(migrations).with.length(3);
+    expect(migrations).with.length(4);
 
     expect(migrations[0].execution_ts).to.not.be.undefined;
     expect(migrations[0].script_name).equal('V20161126203834__create_table_1_0_0.sql');
@@ -55,6 +58,12 @@ describe('Sequelize Migration', () => {
     expect(migrations[2].description).equal('create table 1 1 0');
     expect(migrations[2].version).equal('20161126204548');
     expect(migrations[2].success).equal(true);
+
+    expect(migrations[3].execution_ts).to.not.be.undefined;
+    expect(migrations[3].script_name).equal('V20200112083706__create_tables.sql');
+    expect(migrations[3].description).equal('create tables');
+    expect(migrations[3].version).equal('20200112083706');
+    expect(migrations[3].success).equal(true);
   });
 
   it('should update schema', async () => {
@@ -72,7 +81,7 @@ describe('Sequelize Migration', () => {
       order: [['script_name', 'ASC']]
     });
 
-    expect(migrations).with.length(3);
+    expect(migrations).with.length(4);
 
     writeFileSync(newScriptPathMysql, `
       CREATE TABLE table_1_1_1 (
