@@ -1,0 +1,31 @@
+{
+  "name": "@lisbtack/sequelize-aws-data-api",
+  "description": "AWS Data API connector for Sequelize",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "homepage": "https://libstack.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergiofilhowz/libstack.git"
+  },
+  "license": "MIT",
+  "author": "Sérgio Marcelino <sergiofilhow@gmail.com>",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc --diagnostics -p tsconfig.json"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.601.0",
+    "bluebird": "^3.7.2",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "sequelize": "^5.21.3"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@types/bluebird": "^3.5.29",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.1.6",
+    "@types/validator": "^12.0.1",
+    "typescript": "^3.7.4"
+  }
+}
