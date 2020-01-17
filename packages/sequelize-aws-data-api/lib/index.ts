@@ -1,7 +1,8 @@
 import AWS from 'aws-sdk';
 import { Agent } from 'https';
 import { DataApi, DataApiOptions } from './DataApi';
-import { DataApiConnectionManager, DataApiQuery } from './PostgresDialect';
+import { DataApiConnectionManager } from './DataApiConnectionManager';
+import { DataApiQuery } from './DataApiQuery';
 
 const sslAgent: Agent = new Agent({
   keepAlive: true,
@@ -43,7 +44,7 @@ export function enableDataAPI(sequelize: any, options: DataApiOptions): void {
       if (this._bindParam) {
         return this._bindParam(value, options) + '::date';
       }
-      return options.bindParam(this.stringify(value, options)) + '::date';
+      return options.bindParam(this.stringify(value, options), null) + '::date';
     };
   }
 

@@ -14,7 +14,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 declare type RecordParser = (record: any) => any;
-declare type Parser = (column: Field) => string|number|boolean|null|number[]|string[];
+declare type Parser = (column: Field) => string|number|boolean|null|number[]|string[]|Date;
 declare type RowParser = (object: any, column: Field) => void;
 
 const includeResultMetadata = true;
@@ -34,7 +34,8 @@ const parserDictionary: { [key: string]: Parser } = {
   BOOLEAN: column => column.isNull ? null : column.booleanValue,
 
   VARCHAR: column => column.isNull ? null : column.stringValue,
-  DATETIME: column => column.isNull ? null : moment.utc(column.stringValue).toDate().toISOString(),
+  DATETIME: column => column.isNull ? null : moment.utc(column.stringValue).toDate(),
+  DATE: column => column.isNull ? null : moment.utc(column.stringValue).toDate(),
   TEXT: column => column.isNull ? null : column.stringValue,
 
   BIGINT: column => column.isNull ? null : column.longValue,
@@ -42,7 +43,7 @@ const parserDictionary: { [key: string]: Parser } = {
   TINYINT: column => column.isNull ? null : column.longValue,
   SMALLINT: column => column.isNull ? null : column.longValue,
   INTEGER: column => column.isNull ? null : column.longValue,
-  DECIMAL: column => column.isNull ? null : column.longValue ?? column.doubleValue,
+  DECIMAL: column => column.isNull ? null : column.doubleValue ?? column.longValue ?? column.stringValue,
 
   FLOAT: column => column.isNull ? null : column.doubleValue,
   REAL: column => column.isNull ? null : column.doubleValue,
@@ -60,7 +61,7 @@ const parserDictionary: { [key: string]: Parser } = {
   bigserial: column => column.isNull ? null : column.longValue,
   float8: column => column.isNull ? null : column.doubleValue,
   numeric: column => column.isNull ? null : column.stringValue,
-  timestamptz: column => column.isNull ? null : moment(column.stringValue, 'YYYY-MM-DD HH:mm:ss').toDate().toISOString(),
+  timestamptz: column => column.isNull ? null : moment.utc(column.stringValue).toDate(),
 };
 const defaultParser = (column: Value) => column.isNull ? null : column.stringValue;
 
