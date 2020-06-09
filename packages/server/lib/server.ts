@@ -5,7 +5,7 @@ import { createServer, Server as HttpServer } from 'http';
 import config from './config';
 import controller from '@libstack/router';
 
-const ALLOWED_ORIGIN: string = config.get('ALLOWED_ORIGIN') ?? '*';
+const ALLOWED_ORIGIN: string = config.get('ALLOWED_ORIGIN', '*');
 
 export class Server {
   app: Application;
