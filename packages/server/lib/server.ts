@@ -5,6 +5,8 @@ import { createServer, Server as HttpServer } from 'http';
 import config from './config';
 import controller from '@libstack/router';
 
+const ALLOWED_ORIGIN: string = config.get('ALLOWED_ORIGIN', '*');
+
 export class Server {
   app: Application;
   server: HttpServer;
@@ -15,7 +17,7 @@ export class Server {
     this.app = express();
     this.server = createServer(this.app);
 
-    this.app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization'] }));
+    this.app.use(cors({ allowedHeaders: ['Content-Type', 'Authorization'], origin: ALLOWED_ORIGIN }));
     this.app.use(bodyParser.json({ limit: '20mb' }));
     this.app.use('/', controller.router);
   }
