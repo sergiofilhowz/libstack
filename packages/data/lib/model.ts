@@ -1,5 +1,5 @@
 import { ModelCtor } from 'sequelize-typescript';
-import { QueryBuilder } from './query/query.builder';
+import { QueryBuilder, QueryOptions } from './query/query.builder';
 
 export interface Page<T> {
   list: Array<T>;
@@ -33,6 +33,8 @@ export interface SingleOptions<P, C> {
    * The criteria request if necessary
    */
   criteria?: CriteriaRequest<C>;
+
+  options?: QueryOptions
 }
 
 export interface ListOptions<P, C> extends SingleOptions<P, C> {
@@ -57,7 +59,7 @@ export class DataModel {
    * @param options
    */
   async list<P, C>(options:ListOptions<P, C>):Promise<Array<P>> {
-    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection, options.options);
     queryBuilder.query.size(options.pageSize);
     queryBuilder.criteria(options.criteria);
     queryBuilder.sort(options.sort);
@@ -69,7 +71,7 @@ export class DataModel {
    * @param options
    */
   async page<P, C>(options:PageOptions<P, C>):Promise<Page<P>> {
-    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection, options.options);
     queryBuilder.criteria(options.criteria);
     queryBuilder.query.page(options.page, options.pageSize);
     queryBuilder.sort(options.sort);
@@ -82,7 +84,7 @@ export class DataModel {
    * @param options
    */
   async single<P, C>(options:SingleOptions<P, C>):Promise<P> {
-    const queryBuilder = new QueryBuilder<P>(this.model, options.projection);
+    const queryBuilder = new QueryBuilder<P>(this.model, options.projection, options.options);
     queryBuilder.criteria(options.criteria);
     return queryBuilder.single();
   }

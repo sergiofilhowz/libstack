@@ -2,6 +2,9 @@
 
 ## @libstack/data
 
+### 1.1.0
+[FEATURE] Added a way to retrieve removed data by using the options on list or single
+
 ### 1.0.2
 [FIX] Fixed an issue that was causing on association with custom field (Was trying to resolve with the actual fieldName, not the sequelize field).
 
