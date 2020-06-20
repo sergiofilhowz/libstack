@@ -162,6 +162,38 @@ describe('Model', () => {
     expect(result).to.be.null;
   });
 
+  it('should get a single removed person when trying to retrieve explictly', async () => {
+    const newPerson: Person = await Person.create({
+      uuid: createUuid(),
+      firstName: 'Sergio',
+      lastName: 'Marcelino',
+      age: 30,
+      address_id: address.id
+    });
+    expect(newPerson).to.have.property('id');
+
+    await newPerson.destroy();
+
+    let result: PersonResponse = await PersonModel.single({
+      projection: PersonResponse,
+      criteria: {
+        reference: PersonSingleCriteria,
+        query: { uuid: newPerson.uuid }
+      }
+    });
+    expect(result).to.be.null;
+
+    result = await PersonModel.single({
+      projection: PersonResponse,
+      criteria: {
+        reference: PersonSingleCriteria,
+        query: { uuid: newPerson.uuid }
+      },
+      options: { includeRemoved: true }
+    });
+    expect(result).to.not.be.null;
+  });
+
   describe('Sort', () => {
 
     it('should sort by property on projection', async () => {

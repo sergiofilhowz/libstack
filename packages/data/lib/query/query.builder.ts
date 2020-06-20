@@ -19,7 +19,11 @@ type FieldDefinition = {
   transform?: Transformer;
   alias: string;
   column: string;
-};
+}
+
+export interface QueryOptions {
+  includeRemoved?: boolean
+}
 
 export class QueryBuilder<T> {
   readonly query: Query;
@@ -30,7 +34,7 @@ export class QueryBuilder<T> {
   private readonly fields: { [key: string]: FieldDefinition } = {};
   private readonly projectionConfig: ProjectionConfiguration;
 
-  constructor(private model: ModelCtor<any>, private projection: { new(): T; }) {
+  constructor(private model: ModelCtor<any>, private projection: { new(): T; }, private options?: QueryOptions) {
     this.query = new Query(model.sequelize);
     this.mainAlias = this.createAlias(model.name);
 
@@ -41,7 +45,7 @@ export class QueryBuilder<T> {
     this.projectionConfig = Reflect.getMetadata('projection', this.projection);
 
     this.query.from(getTableName(model), this.mainAlias);
-    if (this.model.options.paranoid) {
+    if (!options?.includeRemoved && this.model.options.paranoid) {
       this.query.where(this.mainAlias + '.' + getDeletedAtColumn(model) + ' IS NULL');
     }
 

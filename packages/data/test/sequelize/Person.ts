@@ -13,7 +13,7 @@ import { SequelizeModel } from '@libstack/sequel';
 import { Address } from './Address';
 
 @SequelizeModel
-@Table({ tableName: 'person' })
+@Table({ tableName: 'person', paranoid: true })
 export class Person extends Model<Person> {
 
   @AutoIncrement

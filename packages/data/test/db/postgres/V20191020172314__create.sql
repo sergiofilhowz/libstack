@@ -27,5 +27,6 @@ CREATE TABLE person (
   address_id  INTEGER                      NULL REFERENCES address(id),
   created_at  TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_at  TIMESTAMP WITH TIME ZONE NOT NULL,
+  removed_at  TIMESTAMP WITH TIME ZONE     NULL,
   PRIMARY KEY (id)
 );
