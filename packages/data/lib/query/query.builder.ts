@@ -52,17 +52,22 @@ export class QueryBuilder<T> {
     this.build(this.mainAlias, this.model, this.projectionConfig);
   }
 
-  sort(sort: string) {
+  sort(sort: string | string []) {
     if (!sort) return;
 
-    const sortField: string = sort.charAt(0) === '-' ? sort.substr(1) : sort;
-    const sortAscending: boolean = sort.charAt(0) !== '-';
-    if (!this.fields.hasOwnProperty(sortField)) {
-      throw new Error(`Sort field "${sortField}" not found`);
-    }
+    const sortList: string [] = typeof sort === 'string' ? [sort] : sort
 
-    const field: FieldDefinition = this.fields[sortField];
-    this.query.order(`${field.alias}.${field.column}`, sortAscending);
+    for (let sortItem of sortList) {
+      const sortField: string = sortItem.charAt(0) === '-' ? sortItem.substr(1) : sortItem;
+      const sortAscending: boolean = sortItem.charAt(0) !== '-';
+
+      if (!this.fields.hasOwnProperty(sortField)) {
+        throw new Error(`Sort field "${sortField}" not found`);
+      }
+
+      const field: FieldDefinition = this.fields[sortField];
+      this.query.order(`${field.alias}.${field.column}`, sortAscending);
+    }
   }
 
   criteria(criteriaRequest: CriteriaRequest<any>) {

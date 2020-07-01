@@ -2,6 +2,9 @@
 
 ## @libstack/data
 
+### 1.2.0
+[FEATURE] Now possible to sort on multiple properties at the same time
+
 ### 1.1.0
 [FEATURE] Added a way to retrieve removed data by using the options on list or single
 

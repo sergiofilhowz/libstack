@@ -38,7 +38,7 @@ export interface SingleOptions<P, C> {
 }
 
 export interface ListOptions<P, C> extends SingleOptions<P, C> {
-  sort?: string;
+  sort?: string | string[];
   pageSize?: number;
 }
 
