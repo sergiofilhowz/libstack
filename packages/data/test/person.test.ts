@@ -102,6 +102,25 @@ describe('Model', () => {
     expect(result[1]).to.have.property('city').equal(city.name);
   });
 
+  it('should list with multiple properties', async () => {
+    let result: PersonResponse [] = await PersonModel.list({
+      sort: ['address.city.name', 'firstName'],
+      projection: PersonResponse,
+    });
+
+    expect(result).with.length(2);
+    expect(result[0]).to.have.property('firstName').equal(anotherPerson.firstName); // starts with J
+    expect(result[1]).to.have.property('firstName').equal(person.firstName); // starts with S
+
+    result = await PersonModel.list({
+      sort: ['address.city.name', '-firstName'],
+      projection: PersonResponse,
+    });
+    expect(result).with.length(2);
+    expect(result[0]).to.have.property('firstName').equal(person.firstName); // starts with S
+    expect(result[1]).to.have.property('firstName').equal(anotherPerson.firstName); // starts with J
+  });
+
   it('should get page of people', async () => {
     const result:Page<PersonResponse> = await PersonModel.page({
       pageSize: 1,
