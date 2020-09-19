@@ -24,6 +24,9 @@
 
 ## @libstack/sequel
 
+### 1.1.1
+[FIX] Added the database cleaner (Test only) to also drop enums
+
 ### 1.1.0
 [FEATURE] Added the separateStatements mode on migrations
 
