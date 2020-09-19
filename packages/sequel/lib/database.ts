@@ -88,6 +88,7 @@ export class Database {
         throw new Error('Clear is only allowed when NODE_ENV is `test`');
       }
       await this.sequelize.getQueryInterface().dropAllTables({ force: true });
+      await this.sequelize.getQueryInterface().dropAllEnums();
     }
     await this.migration.sync();
   };
