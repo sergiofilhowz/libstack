@@ -28,7 +28,7 @@
     "@libstack/server": "^1.0.0"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "query-string": "6.8.3"
