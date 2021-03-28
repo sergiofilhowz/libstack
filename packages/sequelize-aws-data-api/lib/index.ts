@@ -42,9 +42,9 @@ export function enableDataAPI(sequelize: any, options: DataApiOptions): void {
   if (sequelize.options.dialect === 'postgres') {
     sequelize.dialect.DataTypes.DATE.prototype.bindParam = function (value: any, options: any) {
       if (this._bindParam) {
-        return this._bindParam(value, options) + '::date';
+        return this._bindParam(value, options) + '::timestamp';
       }
-      return options.bindParam(this.stringify(value, options), null) + '::date';
+      return options.bindParam(this.stringify(value, options), null) + '::timestamp';
     };
   }
 
