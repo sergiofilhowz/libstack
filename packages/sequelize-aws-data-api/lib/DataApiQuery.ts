@@ -16,7 +16,7 @@ export class DataApiQuery extends AbstractQuery {
   }
 
   run(sql: string, parameters: any []): any {
-    console.log(sql, parameters);
+    this.connection.log(sql, parameters);
     return this.connection.query(sql, parameters).then((result: CommonResult) => {
       // @ts-ignore
       if (this.isInsertQuery(sql) || this.isUpdateQuery(sql)) {
